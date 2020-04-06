@@ -1,5 +1,6 @@
 package org._brown_tech._object;
 
+import com.google.gson.Gson;
 import javafx.scene.image.Image;
 
 import java.io.Serializable;
@@ -106,16 +107,6 @@ public class Product implements Serializable {
 
     @Override
     public String toString() {
-        return "Product{" +
-                "serial='" + serial + '\'' +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", starCount=" + starCount +
-                ", stockQuantity=" + stockQuantity +
-                ", markedPrice=" + markedPrice +
-                ", buyingPrice=" + buyingPrice +
-                ", itemImage=" + itemImage +
-                ", isAvailable=" + isAvailable +
-                '}';
+        return new Gson().toJson(this, Product.class);
     }
 }

@@ -1,5 +1,7 @@
 package org._brown_tech._object;
 
+import com.google.gson.Gson;
+
 import java.io.Serializable;
 
 /**
@@ -74,13 +76,6 @@ public class Account implements Serializable {
 
     @Override
     public String toString() {
-        return "Account{" +
-                "username='" + username + '\'' +
-                ", firstname='" + firstname + '\'' +
-                ", surname='" + surname + '\'' +
-                ", siri='" + siri + '\'' +
-                ", email='" + email + '\'' +
-                ", isAdmin=" + isAdmin +
-                '}';
+        return new Gson().toJson(this, Account.class);
     }
 }

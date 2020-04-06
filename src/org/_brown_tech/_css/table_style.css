@@ -1,9 +1,9 @@
 .tree-table-view .column-header, .tree-table-view .column-header .filler {
-    -fx-background-color: rgb(142, 75, 2);
+    -fx-background-color: linear-gradient(#FFB900, #F0D801);
 }
 .tree-table-view .column-header .label {
     -fx-font-family: 'Fira Sans Medium';
-    -fx-font-size: 14px;
+    -fx-font-size: 16px;
     -fx-letter-spacing: 2px;
     -fx-text-fill: white;
     -fx-font-weight: bold;
@@ -20,8 +20,8 @@
     -fx-border-color: rgba(41, 41, 45, 0.4);
 }
 .tree-table-view .tree-table-row-cell:selected {
-    -fx-background-color: rgb(252, 166, 81);
-    -fx-table-cell-border-color: rgb(252, 166, 81);
+    -fx-background-color: #0072cd;
+    /* -fx-table-cell-border-color: #FFB900; */
     -fx-text-background-color: white;
     -fx-alignment: CENTER;  
 }

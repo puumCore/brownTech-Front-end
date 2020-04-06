@@ -64,7 +64,7 @@ public class Email extends Issues {
             }
             smtpTransport.close();
         } catch (MessagingException e) {
-            new Thread(new Issues().write_log("\n\n" + new Issues().timeStamp() + ": The following Exception occurred,\n" + e, 1)).start();
+            new Thread(new Issues().write_log("\n\n" + new Issues().time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
             new Thread(new Issues().stack_trace_printing(e.getStackTrace())).start();
             e.printStackTrace();
             new Issues().programmer_error(e).show();

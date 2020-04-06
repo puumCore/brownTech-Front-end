@@ -58,6 +58,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.UnaryOperator;
+import java.util.regex.Pattern;
 
 /**
  * @author Mandela
@@ -101,6 +102,8 @@ public class MainUI extends Issues implements Initializable {
     private String USER_MWENYE_AMELOGIN = null;
     private Account account = null;
     private String PATH_TO_IMAGE_OF_NEW_PRODUCT = null;
+    private final List<String> knownProductSerials = new ArrayList<>();
+    private Task<Object> billAmountAnimation;
 
     @FXML
     private StackPane phaseTwo;
@@ -345,6 +348,10 @@ public class MainUI extends Issues implements Initializable {
                 return;
             }
             final int requestedQuantity = Integer.parseInt(quantityTF.getText().trim());
+            if (requestedQuantity == 0) {
+                warning_message("Incomplete!", "The customer has to be provided with one or more items not ZERO of them").show();
+                return;
+            }
             final double agreedCost = Double.parseDouble(sellingPriceTF.getText().trim());
             final double lowestCost = (product.getBuyingPrice() * requestedQuantity);
             if (agreedCost > lowestCost) {
@@ -365,7 +372,7 @@ public class MainUI extends Issues implements Initializable {
                     product = null;
                     cartItems = get_all_cart_items();
                     new Thread(display_cart_items()).start();
-                    new Thread(totalPrice_animation(get_cost_of_items_in_cart())).start();
+                    start_animate_bill_amount();
                     reset_product_search_info();
                     success_notification("Product has been successfully added to cart").show();
                 } else {
@@ -386,13 +393,13 @@ public class MainUI extends Issues implements Initializable {
             }
             if (Double.parseDouble(serviceCostTF.getText().trim()) > 0) {
                 final CartItem cartItem = new CartItem();
-                cartItem.setProductOrServiceSerial(String.format("%d", onlineService.getSerial()));
+                cartItem.setProductOrServiceSerial("S".concat(String.format("%d", onlineService.getSerial())));
                 cartItem.setName(onlineService.getName());
                 cartItem.setPrice(Double.parseDouble(serviceCostTF.getText().trim()));
                 cartItem.setQuantityRequested(1);
                 cartItem.setProduct(false);
                 if (add_product_or_service_to_cart(cartItem)) {
-                    final int rowId = get_row_id_of_cart_item(String.format("%d", onlineService.getSerial()), cartItem);
+                    final int rowId = get_row_id_of_cart_item(cartItem.getProductOrServiceSerial(), cartItem);
                     if (rowId == -1) {
                         error_message("Process incomplete!", "The service has been added to cart but i can't get its index position").show();
                         return;
@@ -400,7 +407,7 @@ public class MainUI extends Issues implements Initializable {
                     serviceCostTF.setText("0");
                     cartItems = get_all_cart_items();
                     new Thread(display_cart_items()).start();
-                    new Thread(totalPrice_animation(get_cost_of_items_in_cart())).start();
+                    start_animate_bill_amount();
                     reset_product_search_info();
                     success_notification("The service has been successfully added to cart").show();
                 } else {
@@ -433,9 +440,9 @@ public class MainUI extends Issues implements Initializable {
                 }
                 password = plainSiriTF.getText().trim();
             }
-            String firstName = verify_user(usernameTF.getText().trim(), password);
+            final String firstName = verify_user(usernameTF.getText().trim(), password);
             if (firstName == null) {
-                error_message("Invalid credentials", "Check your username and password!").show();
+                error_message("Invalid credentials!", "Check your username or password").show();
             } else {
                 new FadeIn(displayPane).play();
                 new FadeInLeft(menuPane).play();
@@ -445,14 +452,14 @@ public class MainUI extends Issues implements Initializable {
                     warning_message("Feature failed", "I could not fetch your details to enable you to update your account").show();
                 } else {
                     display_account_details(account);
+                    usernameTF.setText("");
+                    siriPF.setText("");
+                    plainSiriTF.setText("");
+                    new FadeOut(phaseOne).play();
+                    phaseTwo.toFront();
+                    new FadeIn(phaseTwo).play();
+                    Main.stage.setTitle("Welcome ".concat(firstName));
                 }
-                usernameTF.setText("");
-                siriPF.setText("");
-                plainSiriTF.setText("");
-                new FadeOut(phaseOne).play();
-                phaseTwo.toFront();
-                new FadeIn(phaseTwo).play();
-                success_notification("Hey ".concat(firstName).concat(".I wish you well!")).show();
             }
         }
     }
@@ -480,7 +487,9 @@ public class MainUI extends Issues implements Initializable {
                 error_message("No image selected", "Try again..").show();
                 return;
             }
-            if (SOURCE_FILE.getName().endsWith(".png") || SOURCE_FILE.getName().endsWith(".jpg") || SOURCE_FILE.getName().endsWith(".jpeg")) {
+            if (SOURCE_FILE.getName().endsWith(".png") ||
+                    SOURCE_FILE.getName().endsWith(".jpg") ||
+                    SOURCE_FILE.getName().endsWith(".jpeg")) {
                 final File destination_folder = new File(Main.RESOURCE_PATH.getAbsolutePath().concat("\\_gallery\\"));
                 try {
                     FileUtils.copyFileToDirectory(SOURCE_FILE, destination_folder);
@@ -495,7 +504,7 @@ public class MainUI extends Issues implements Initializable {
                     prodView.setImage(new Image(getClass().getResourceAsStream(INPUT_STREAM_TO_NO_IMAGE)));
                     e.printStackTrace();
                     programmer_error(e);
-                    new Thread(write_log("\n\n" + timeStamp() + ": The following Exception occurred,\n" + e, 1)).start();
+                    new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
                     new Thread(stack_trace_printing(e.getStackTrace())).start();
                 }
             } else {
@@ -504,7 +513,7 @@ public class MainUI extends Issues implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
             programmer_error(e);
-            new Thread(write_log("\n\n" + timeStamp() + ": The following Exception occurred,\n" + e, 1)).start();
+            new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
             new Thread(stack_trace_printing(e.getStackTrace())).start();
         }
     }
@@ -579,7 +588,7 @@ public class MainUI extends Issues implements Initializable {
                                     success_notification("The sale has been recorded and the stock may have been updated").show();
                                     receipt_formatting_for_printing(NEW_RECEIPT_NUMBER, PAID_AMOUNT, CART_BILL_AMOUNT, 0);
                                     new Thread(display_cart_items()).start();
-                                    new Thread(totalPrice_animation(get_cost_of_items_in_cart())).start();
+                                    start_animate_bill_amount();
                                     cashTF.setText("");
                                 } else {
                                     error_message("Incomplete!", "The stock was not updated").show();
@@ -629,7 +638,7 @@ public class MainUI extends Issues implements Initializable {
                                     success_notification("The sale has been recorded and the stock may have been updated").show();
                                     receipt_formatting_for_printing(NEW_RECEIPT_NUMBER, PAID_AMOUNT, CART_BILL_AMOUNT, 1);
                                     new Thread(display_cart_items()).start();
-                                    new Thread(totalPrice_animation(get_cost_of_items_in_cart())).start();
+                                    start_animate_bill_amount();
                                     chequeNumTF.setText("");
                                     drawerNameTF.setText("");
                                     maturityDateTF.getEditor().setText("");
@@ -759,7 +768,11 @@ public class MainUI extends Issues implements Initializable {
 
     @FXML
     private void show_products_with_the_provided_details(ActionEvent event) {
-        find_stock_item();
+        if (productSearchDetailsTF.getText().trim().isEmpty() || productSearchDetailsTF.getText() == null) {
+            empty_and_null_pointer_message(productSearchDetailsTF.getParent()).show();
+            return;
+        }
+        find_stock_item(productSearchDetailsTF.getText().trim());
     }
 
     @FXML
@@ -847,7 +860,12 @@ public class MainUI extends Issues implements Initializable {
             }
             if (!accEmailTF.getText().trim().equals(account.getEmail())) {
                 if (!accEmailTF.getText().trim().isEmpty() || accEmailTF.getText() != null) {
-                    email = accEmailTF.getText().trim();
+                    if (email_is_in_correct_format(accEmailTF.getText().trim())) {
+                        email = accEmailTF.getText().trim();
+                    } else {
+                        error_message("Bad email!", "Kindly ensure that the email you have provided is in the correct formant").show();
+                        return;
+                    }
                 }
             }
             String newPassword_typeA = "";
@@ -1023,7 +1041,7 @@ public class MainUI extends Issues implements Initializable {
         product1.setBuyingPrice(Double.parseDouble(prodBuyingPriceTF.getText().trim()));
         if (insert_product_into_stock(product1, nameOfImage)) {
             final List<Product> productList = get_product_list();
-            update_all_product_and_mpesaDetails_suggestions_feature(productList);
+            //update_all_product_and_mpesaDetails_suggestions_feature(productList);
             put_stock_items_into_table(generate_stock_model_from_product_model(productList));
             prodSerialTF.setText("");
             prodRatingsCbx.getSelectionModel().clearSelection();
@@ -1041,6 +1059,50 @@ public class MainUI extends Issues implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         prepare_scene();
         breath_of_life();
+    }
+
+    /**
+     * UI driven updates
+     *
+     * @<code> private void prepare_scene() {
+     * start_loading_spinner();
+     * view_image(new Image(getClass().getResourceAsStream(INPUT_STREAM_TO_NO_IMAGE)), productView);
+     * display_or_hide_payments_pane(productsPane);
+     * }
+     * </code>
+     */
+    private void prepare_scene() {
+        view_image_with_dropShadow_effect(new Image(getClass().getResourceAsStream(INPUT_STREAM_TO_NO_IMAGE)), productView);
+        display_or_hide_payments_pane(productsPane);
+    }
+
+    /**
+     * Functionality updates (code driven)
+     * * @<code> updateAutoCompleteTextField(mpesaPhoneAndTransactionCodePopup, mpesaDetailTF);
+     */
+
+    private void breath_of_life() {
+        start_loading_spinner();
+        Platform.runLater(() -> Main.stage.setOnCloseRequest(event -> clear_cart(false)));
+        productSerial.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (knownProductSerials.contains(newValue)) {
+                product = get_details_of_a_product(newValue.trim());
+                if (product != null) {
+                    view_image_with_dropShadow_effect(product.getItemImage(), productView);
+                    pNameLbl.setText(product.getName());
+                    pDescriptionLbl.setText(product.getDescription());
+                    pQualityView.setImage(get_image_of_ratings(product.getStarCount()));
+                    pMarkedPriceLbl.setText("Ksh ".concat(String.format("%,.1f", product.getMarkedPrice())));
+                    pQuantityLeftLbl.setText(format_quantity(product.getStockQuantity()));
+                }
+            }
+        });
+
+    }
+
+    @NotNull
+    private Boolean email_is_in_correct_format(String param) {
+        return Pattern.matches("^[\\w!#$%&’*+/=?`{|}~^-]+(?:\\.[\\w!#$%&’*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$", param);
     }
 
     public Task<Object> printReceipt(String header, String footer) {
@@ -1082,7 +1144,7 @@ public class MainUI extends Issues implements Initializable {
         try {
             new Thread(printReceipt(header, footer)).start();
         } catch (Exception ex) {
-            new Thread(write_log("\n\n" + timeStamp() + ": The following Exception occurred,\n" + ex, 1)).start();
+            new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + ex, 1)).start();
             new Thread(stack_trace_printing(ex.getStackTrace())).start();
             ex.printStackTrace();
             error_message("Exception Error", ex.getLocalizedMessage()).show();
@@ -1121,36 +1183,18 @@ public class MainUI extends Issues implements Initializable {
         }
     }
 
-    /**
-     * UI driven updates
-     *
-     * @<code> private void prepare_scene() {
-     * start_loading_spinner();
-     * view_image(new Image(getClass().getResourceAsStream(INPUT_STREAM_TO_NO_IMAGE)), productView);
-     * display_or_hide_payments_pane(productsPane);
-     * }
-     * </code>
-     */
-    private void prepare_scene() {
-        view_image_with_dropShadow_effect(new Image(getClass().getResourceAsStream(INPUT_STREAM_TO_NO_IMAGE)), productView);
-        display_or_hide_payments_pane(productsPane);
-    }
-
-    /**
-     * Functionality updates (code driven)
-     * * @<code> updateAutoCompleteTextField(mpesaPhoneAndTransactionCodePopup, mpesaDetailTF);
-     */
-
-    private void breath_of_life() {
-        start_loading_spinner();
-    }
-
-    private void find_stock_item() {
-        if (productSearchDetailsTF.getText().trim().isEmpty() || productSearchDetailsTF.getText() == null) {
-            empty_and_null_pointer_message(productSearchDetailsTF.getParent()).show();
-            return;
+    private void start_animate_bill_amount() {
+        if (billAmountAnimation != null) {
+            if (billAmountAnimation.isRunning()) {
+                billAmountAnimation.cancel();
+            }
         }
-        final List<Product> productList = get_details_of_products_from_the_given_param(productSearchDetailsTF.getText().trim());
+        billAmountAnimation = totalPrice_animation(get_cost_of_items_in_cart());
+        new Thread(billAmountAnimation).start();
+    }
+
+    private void find_stock_item(String param) {
+        final List<Product> productList = get_details_of_products_from_the_given_param(param);
         if (productList.isEmpty()) {
             error_message("Zero result found!", "I could not find any item with an attribute you have provided, try again with something different.").show();
             return;
@@ -1201,6 +1245,10 @@ public class MainUI extends Issues implements Initializable {
         if (!productSerialList.isEmpty()) {
             update_autoComplete_suggestions(productSerialsPopup, productSerialList);
             update_autoComplete_suggestions(addProductSerialsPopup, productSerialList);
+            if (!knownProductSerials.isEmpty()) {
+                knownProductSerials.clear();
+            }
+            knownProductSerials.addAll(productSerialList);
         }
         final ObservableList<String> stringObservableList = FXCollections.observableArrayList();
         for (Product product1 : productList) {
@@ -1354,17 +1402,17 @@ public class MainUI extends Issues implements Initializable {
 
                     }*/
                     if (jfxButton.getText().equalsIgnoreCase("cash")) {
-                        cashUnderline.setStyle("-fx-background-color: rgb(226, 123, 0);");
+                        cashUnderline.setStyle("-fx-background-color: linear-gradient(#FFB900, #F0D801);");
                         chequeUnderline.setStyle("-fx-background-color:  rgba(226, 123, 0, 0.0);");
                         mpesaUnderline.setStyle("-fx-background-color:  rgba(226, 123, 0, 0.0);");
                     } else if (jfxButton.getText().equalsIgnoreCase("cheque")) {
                         cashUnderline.setStyle("-fx-background-color: rgba(226, 123, 0, 0.0);");
-                        chequeUnderline.setStyle("-fx-background-color: rgb(226, 123, 0);");
+                        chequeUnderline.setStyle("-fx-background-color: linear-gradient(#FFB900, #F0D801);");
                         mpesaUnderline.setStyle("-fx-background-color:  rgba(226, 123, 0, 0.0);");
                     } else {
                         cashUnderline.setStyle("-fx-background-color: rgba(226, 123, 0, 0.0);");
                         chequeUnderline.setStyle("-fx-background-color: rgba(226, 123, 0, 0.0);");
-                        mpesaUnderline.setStyle("-fx-background-color: rgb(226, 123, 0);");
+                        mpesaUnderline.setStyle("-fx-background-color: linear-gradient(#FFB900, #F0D801);");
                     }
                 } else {
                     node.setStyle("-fx-background-radius: 0px;" +
@@ -1458,7 +1506,7 @@ public class MainUI extends Issues implements Initializable {
                     } catch (IOException e) {
                         e.printStackTrace();
                         programmer_error(e);
-                        new Thread(write_log("\n\n" + timeStamp() + ": The following Exception occurred,\n" + e, 1)).start();
+                        new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
                         new Thread(stack_trace_printing(e.getStackTrace())).start();
                         Platform.runLater(() -> error_message_alert("IOException: ", e.getLocalizedMessage()).show());
                     }
@@ -1503,16 +1551,16 @@ public class MainUI extends Issues implements Initializable {
     private Image get_image_of_ratings_for_table(int count) {
         switch (count) {
             case 1:
-                return new Image("/org/_brown_tech/_images/_pictures/table_1_star.png");
+                return new Image("/org/_brown_tech/_images/_icons/table_1_star.png");
             case 2:
-                return new Image("/org/_brown_tech/_images/_pictures/table_2_star.png");
+                return new Image("/org/_brown_tech/_images/_icons/table_2_star.png");
             case 3:
-                return new Image("/org/_brown_tech/_images/_pictures/table_3_star.png");
+                return new Image("/org/_brown_tech/_images/_icons/table_3_star.png");
             case 5:
-                return new Image("/org/_brown_tech/_images/_pictures/table_5_star.png");
+                return new Image("/org/_brown_tech/_images/_icons/table_5_star.png");
             case 4:
             default:
-                return new Image("/org/_brown_tech/_images/_pictures/table_4_star.png");
+                return new Image("/org/_brown_tech/_images/_icons/table_4_star.png");
         }
     }
 
@@ -1521,16 +1569,16 @@ public class MainUI extends Issues implements Initializable {
     private Image get_image_of_ratings(int count) {
         switch (count) {
             case 1:
-                return new Image("/org/_brown_tech/_images/_pictures/1_star.png");
+                return new Image("/org/_brown_tech/_images/_icons/1_star.png");
             case 2:
-                return new Image("/org/_brown_tech/_images/_pictures/2_star.png");
+                return new Image("/org/_brown_tech/_images/_icons/2_star.png");
             case 3:
-                return new Image("/org/_brown_tech/_images/_pictures/3_star.png");
+                return new Image("/org/_brown_tech/_images/_icons/3_star.png");
             case 5:
-                return new Image("/org/_brown_tech/_images/_pictures/5_star.png");
+                return new Image("/org/_brown_tech/_images/_icons/5_star.png");
             case 4:
             default:
-                return new Image("/org/_brown_tech/_images/_pictures/4_star.png");
+                return new Image("/org/_brown_tech/_images/_icons/4_star.png");
         }
     }
 
@@ -1569,12 +1617,12 @@ public class MainUI extends Issues implements Initializable {
             if (node.getClass().equals(JFXButton.class)) {
                 if (node.equals(jfxButton)) {
                     node.setStyle("-fx-background-radius: 0px;" +
-                            "-fx-background-color: #662f01;" +
-                            "-fx-text-fill: #ffffff;");
+                            "-fx-background-color: linear-gradient(#FFB900, #F0D801);" +
+                            "-fx-text-fill: #8e4b02;");
                 } else {
                     node.setStyle("-fx-background-radius: 0px;" +
                             "-fx-background-color: transparent;" +
-                            "-fx-text-fill: #662f01;");
+                            "-fx-text-fill: #868686;");
                 }
             }
         }
@@ -1618,7 +1666,7 @@ public class MainUI extends Issues implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
             programmer_error(e);
-            new Thread(write_log("\n\n" + timeStamp() + ": The following Exception occurred,\n" + e, 1)).start();
+            new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
             new Thread(stack_trace_printing(e.getStackTrace())).start();
         }
     }
@@ -1682,7 +1730,7 @@ public class MainUI extends Issues implements Initializable {
                         Thread.sleep(100);
                         steps++;
                     } catch (InterruptedException e) {
-                        new Thread(write_log("\n\n" + timeStamp() + ": The following Exception occurred,\n" + e, 1)).start();
+                        new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
                         new Thread(stack_trace_printing(e.getStackTrace())).start();
                         Platform.runLater(() -> error_message_alert("IOException: 02", e.getLocalizedMessage()).show());
                         break;
@@ -1697,7 +1745,7 @@ public class MainUI extends Issues implements Initializable {
 
         @Override
         public void handle(Event event) {
-            new Thread(totalPrice_animation(get_cost_of_items_in_cart())).start();
+            start_animate_bill_amount();
         }
     }
 

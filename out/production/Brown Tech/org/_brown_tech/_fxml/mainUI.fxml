@@ -22,12 +22,14 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
 
 <!--suppress JavaFxDefaultTag -->
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1440.0" style="-fx-background-color: rgb(255, 255, 255);" styleClass="root" stylesheets="@../_css/universal.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org._brown_tech._controller.MainUI">
+<StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1440.0" style="-fx-background-color: rgb(255, 255, 255);" styleClass="root" stylesheets="@../_css/universal.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org._brown_tech._controller.MainUI">
    <children>
-      <StackPane fx:id="phaseTwo" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="900.0" prefWidth="1440.0" style="-fx-background-color: rgb(255, 255, 255);" stylesheets="@../_css/phaseTwo.css">
+      <StackPane fx:id="phaseTwo" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="900.0" prefWidth="1440.0" style="-fx-background-color: rgb(255, 255, 255);" stylesheets="@../_css/phaseTwo.css">
          <children>
             <AnchorPane prefHeight="200.0" prefWidth="200.0">
                <children>
@@ -45,20 +47,20 @@
                                     <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="860.0" prefWidth="689.0">
                                        <children>
                                           <Label layoutX="27.0" layoutY="19.0" styleClass="sectionTitle" text="Cart" textFill="#662f01" />
-                                          <VBox layoutX="64.0" layoutY="52.0">
+                                          <VBox layoutX="56.0" layoutY="52.0" prefHeight="277.0" prefWidth="568.0">
                                              <children>
-                                                <AnchorPane prefHeight="36.0" prefWidth="560.0" style="-fx-background-color: rgb(255, 198, 141);">
+                                                <AnchorPane prefHeight="36.0" prefWidth="560.0" style="-fx-background-color: rgb(0, 0, 0);">
                                                    <children>
-                                                      <Label layoutX="14.0" layoutY="9.0" styleClass="table_header" text="Name" textFill="#662f01" />
-                                                      <Label layoutX="299.0" layoutY="9.0" styleClass="table_header" text="Quantity" textFill="#662f01" />
-                                                      <Label layoutX="399.0" layoutY="9.0" styleClass="table_header" text="Cost" textFill="#662f01" />
+                                                      <Label layoutX="14.0" layoutY="9.0" styleClass="table_header" text="Name" textFill="WHITE" />
+                                                      <Label layoutX="299.0" layoutY="9.0" styleClass="table_header" text="Quantity" textFill="WHITE" />
+                                                      <Label layoutX="399.0" layoutY="9.0" styleClass="table_header" text="Cost" textFill="WHITE" />
                                                    </children>
                                                 </AnchorPane>
                                                 <StackPane style="-fx-background-color: rgb(241, 241, 241);">
                                                    <children>
-                                                      <ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="241.0" prefWidth="560.0">
+                                                      <ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="241.0" prefWidth="575.0">
                                                          <content>
-                                                            <VBox fx:id="cartBox" alignment="TOP_CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="239.0" prefWidth="558.0" spacing="2.0">
+                                                            <VBox fx:id="cartBox" alignment="TOP_CENTER" prefHeight="241.0" prefWidth="558.0" spacing="2.0">
                                                                <padding>
                                                                   <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                                                </padding>
@@ -100,7 +102,7 @@
                                                       </JFXButton>
                                                    </children>
                                                 </HBox>
-                                                <AnchorPane fx:id="cashUnderline" layoutX="15.0" layoutY="32.0" prefHeight="3.0" prefWidth="18.0" style="-fx-background-color: rgb(226, 123, 0);" />
+                                                <AnchorPane fx:id="cashUnderline" layoutX="15.0" layoutY="32.0" prefHeight="3.0" prefWidth="18.0" style="-fx-background-color: linear-gradient(#FFB900, #F0D801);" />
                                                 <AnchorPane fx:id="chequeUnderline" layoutX="91.0" layoutY="32.0" prefHeight="3.0" prefWidth="18.0" style="-fx-background-color: rgba(226, 123, 0, 0.0);" />
                                                 <AnchorPane fx:id="mpesaUnderline" layoutX="187.0" layoutY="32.0" prefHeight="3.0" prefWidth="29.0" style="-fx-background-color: rgba(226, 123, 0, 0.0);" />
                                              </children>
@@ -118,8 +120,8 @@
                                                             <Insets left="10.0" right="10.0" />
                                                          </padding>
                                                       </HBox>
-                                                      <JFXTextField fx:id="mpesaTF" focusColor="#e27b00" labelFloat="true" layoutX="35.0" layoutY="134.0" prefHeight="31.0" prefWidth="203.0" promptText="paid amount" styleClass="money_input" text="0" />
-                                                      <JFXButton layoutX="35.0" layoutY="187.0" onAction="#process_payment" prefHeight="31.0" prefWidth="203.0" style="-fx-background-color: #dd7600; -fx-background-radius: 0px;" text="Bill" textFill="WHITE">
+                                                      <JFXTextField fx:id="mpesaTF" focusColor="#e27b00" labelFloat="true" layoutX="35.0" layoutY="134.0" prefHeight="31.0" prefWidth="203.0" promptText="paid amount" style="-jfx-focus-color: linear-gradient(#FFB900, #F0D801);" styleClass="money_input" text="0" />
+                                                      <JFXButton layoutX="35.0" layoutY="190.0" onAction="#process_payment" prefHeight="42.0" prefWidth="203.0" style="-fx-background-color: rgb(0, 0, 0); -fx-background-radius: 0px;" text="Bill" textFill="WHITE">
                                                          <styleClass>
                                                             <String fx:value="handCursor" />
                                                             <String fx:value="menu_buttons" />
@@ -129,10 +131,10 @@
                                                 </AnchorPane>
                                                 <AnchorPane fx:id="chequePane" layoutX="10.0" layoutY="10.0" opacity="0.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: rgb(255, 255, 255);">
                                                    <children>
-                                                      <VBox layoutX="390.0" layoutY="29.0" prefHeight="105.0" prefWidth="203.0" spacing="30.0">
+                                                      <VBox layoutX="392.0" layoutY="80.0" prefHeight="117.0" prefWidth="203.0" spacing="30.0">
                                                          <children>
-                                                            <JFXTextField fx:id="chequeTF" focusColor="#e27b00" labelFloat="true" prefHeight="31.0" prefWidth="203.0" promptText="paid amount" styleClass="money_input" text="0" />
-                                                            <JFXButton fx:id="fromCheque" onAction="#process_payment" prefHeight="31.0" prefWidth="203.0" style="-fx-background-color: #dd7600; -fx-background-radius: 0px;" text="Bill" textFill="WHITE">
+                                                            <JFXTextField fx:id="chequeTF" focusColor="#e27b00" labelFloat="true" prefHeight="31.0" prefWidth="203.0" promptText="paid amount" style="-jfx-focus-color: linear-gradient(#FFB900, #F0D801);" styleClass="money_input" text="0" />
+                                                            <JFXButton fx:id="fromCheque" onAction="#process_payment" prefHeight="42.0" prefWidth="203.0" style="-fx-background-color: rgb(0, 0, 0); -fx-background-radius: 0px;" text="Bill" textFill="WHITE">
                                                                <styleClass>
                                                                   <String fx:value="handCursor" />
                                                                   <String fx:value="menu_buttons" />
@@ -142,15 +144,15 @@
                                                       </VBox>
                                                       <VBox layoutX="31.0" layoutY="29.0" prefHeight="219.0" prefWidth="305.0" spacing="30.0">
                                                          <children>
-                                                            <JFXTextField fx:id="chequeNumTF" focusColor="#e27b00" labelFloat="true" prefHeight="31.0" prefWidth="235.0" promptText="cheque number" styleClass="input_text" />
-                                                            <JFXTextField fx:id="drawerNameTF" focusColor="#e27b00" labelFloat="true" prefHeight="31.0" prefWidth="235.0" promptText="drawer name" styleClass="input_text" />
-                                                            <JFXDatePicker fx:id="maturityDateTF" defaultColor="#dd7600" editable="false" prefHeight="31.0" prefWidth="305.0" promptText="maturity date">
+                                                            <JFXTextField fx:id="chequeNumTF" focusColor="#e27b00" labelFloat="true" prefHeight="31.0" prefWidth="235.0" promptText="cheque number" style="-jfx-focus-color: linear-gradient(#FFB900, #F0D801);" styleClass="input_text" />
+                                                            <JFXTextField fx:id="drawerNameTF" focusColor="#e27b00" labelFloat="true" prefHeight="31.0" prefWidth="235.0" promptText="drawer name" style="-jfx-focus-color: linear-gradient(#FFB900, #F0D801);" styleClass="input_text" />
+                                                            <JFXDatePicker fx:id="maturityDateTF" defaultColor="#dd7600" editable="false" prefHeight="31.0" prefWidth="305.0" promptText="maturity date" style="-jfx-focus-color: linear-gradient(#FFB900, #F0D801); -jfx-default-color: linear-gradient(#FFB900, #F0D801);">
                                                                <styleClass>
                                                                   <String fx:value="handCursor" />
                                                                   <String fx:value="input_text" />
                                                                </styleClass>
                                                             </JFXDatePicker>
-                                                            <JFXComboBox fx:id="banksCbx" focusColor="#e27b00" prefHeight="36.0" prefWidth="305.0" promptText="bank">
+                                                            <JFXComboBox fx:id="banksCbx" focusColor="#e27b00" prefHeight="36.0" prefWidth="305.0" promptText="bank" style="-jfx-focus-color: linear-gradient(#FFB900, #F0D801);">
                                                                <styleClass>
                                                                   <String fx:value="input_text" />
                                                                   <String fx:value="handCursor" />
@@ -163,7 +165,7 @@
                                                 <AnchorPane fx:id="cashPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: rgb(255, 255, 255);">
                                                    <children>
                                                       <JFXTextField fx:id="cashTF" focusColor="#e27b00" labelFloat="true" layoutX="21.0" layoutY="50.0" prefHeight="34.0" prefWidth="203.0" promptText="paid amount" styleClass="money_input" text="0" />
-                                                      <JFXButton fx:id="fromCash" layoutX="21.0" layoutY="121.0" onAction="#process_payment" prefHeight="31.0" prefWidth="203.0" style="-fx-background-color: #dd7600; -fx-background-radius: 0px;" text="Bill" textFill="WHITE">
+                                                      <JFXButton fx:id="fromCash" layoutX="21.0" layoutY="121.0" onAction="#process_payment" prefHeight="42.0" prefWidth="203.0" style="-fx-background-color: rgb(0, 0, 0); -fx-background-radius: 0px;" text="Bill" textFill="WHITE">
                                                          <styleClass>
                                                             <String fx:value="handCursor" />
                                                             <String fx:value="menu_buttons" />
@@ -188,16 +190,16 @@
                                                       <Label id="account_edit_info" fx:id="accInfoLbl" alignment="CENTER" layoutY="31.0" prefHeight="27.0" prefWidth="568.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0" />
                                                       <VBox layoutX="71.0" layoutY="96.0" prefHeight="539.0" prefWidth="426.0" spacing="40.0">
                                                          <children>
-                                                            <JFXTextField fx:id="accUsernameTF" focusColor="#e07800" labelFloat="true" prefHeight="30.0" prefWidth="426.0" promptText="username" styleClass="input_text" unFocusColor="#4d4d4d" />
-                                                            <JFXTextField fx:id="accFirstnameTF" focusColor="#e07800" labelFloat="true" prefHeight="30.0" prefWidth="426.0" promptText="first name" styleClass="input_text" unFocusColor="#4d4d4d" />
-                                                            <JFXTextField fx:id="accSurnameTF" focusColor="#e07800" labelFloat="true" prefHeight="30.0" prefWidth="426.0" promptText="surname" styleClass="input_text" unFocusColor="#4d4d4d" />
-                                                            <JFXTextField fx:id="accEmailTF" focusColor="#e07800" labelFloat="true" prefHeight="30.0" prefWidth="426.0" promptText="email" styleClass="input_text" unFocusColor="#4d4d4d" />
+                                                            <JFXTextField fx:id="accUsernameTF" focusColor="#e07800" labelFloat="true" prefHeight="30.0" prefWidth="426.0" promptText="username" style="-jfx-focus-color: linear-gradient(#FFB900, #F0D801);" styleClass="input_text" unFocusColor="#4d4d4d" />
+                                                            <JFXTextField fx:id="accFirstnameTF" focusColor="#e07800" labelFloat="true" prefHeight="30.0" prefWidth="426.0" promptText="first name" style="-jfx-focus-color: linear-gradient(#FFB900, #F0D801);" styleClass="input_text" unFocusColor="#4d4d4d" />
+                                                            <JFXTextField fx:id="accSurnameTF" focusColor="#e07800" labelFloat="true" prefHeight="30.0" prefWidth="426.0" promptText="surname" style="-jfx-focus-color: linear-gradient(#FFB900, #F0D801);" styleClass="input_text" unFocusColor="#4d4d4d" />
+                                                            <JFXTextField fx:id="accEmailTF" focusColor="#e07800" labelFloat="true" prefHeight="30.0" prefWidth="426.0" promptText="email" style="-jfx-focus-color: linear-gradient(#FFB900, #F0D801);" styleClass="input_text" unFocusColor="#4d4d4d" />
                                                             <VBox alignment="TOP_RIGHT" spacing="5.0">
                                                                <children>
                                                                   <StackPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="350.0">
                                                                      <children>
-                                                                        <JFXTextField fx:id="plainSiriTF1" focusColor="#e27b0000" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="30.0" prefWidth="350.0" promptText="password" styleClass="input_text" unFocusColor="#4d4d4d" />
-                                                                        <JFXPasswordField fx:id="siriPF1" focusColor="#e27b00" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="350.0" promptText="password" styleClass="input_text" unFocusColor="#4d4d4d" />
+                                                                        <JFXTextField fx:id="plainSiriTF1" focusColor="#e27b0000" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="30.0" prefWidth="350.0" promptText="password" style="-jfx-focus-color: linear-gradient(#FFB900, #F0D801);" styleClass="input_text" unFocusColor="#4d4d4d" />
+                                                                        <JFXPasswordField fx:id="siriPF1" focusColor="#e27b00" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="350.0" promptText="password" style="-jfx-focus-color: linear-gradient(#FFB900, #F0D801);" styleClass="input_text" unFocusColor="#4d4d4d" />
                                                                      </children>
                                                                   </StackPane>
                                                                   <JFXButton fx:id="hideShowSiriBtn1" onAction="#show_or_hide_password" prefHeight="0.0" prefWidth="124.0" ripplerFill="#aeaeae" text="Show password">
@@ -212,8 +214,8 @@
                                                                <children>
                                                                   <StackPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="350.0">
                                                                      <children>
-                                                                        <JFXTextField fx:id="plainSiriTF2" focusColor="#e27b0000" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="30.0" prefWidth="350.0" promptText="confirm password" styleClass="input_text" unFocusColor="#4d4d4d" />
-                                                                        <JFXPasswordField fx:id="siriPF2" focusColor="#e27b00" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="350.0" promptText="confirm password" styleClass="input_text" unFocusColor="#4d4d4d" />
+                                                                        <JFXTextField fx:id="plainSiriTF2" focusColor="#e27b0000" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="30.0" prefWidth="350.0" promptText="confirm password" style="-jfx-focus-color: linear-gradient(#FFB900, #F0D801);" styleClass="input_text" unFocusColor="#4d4d4d" />
+                                                                        <JFXPasswordField fx:id="siriPF2" focusColor="#e27b00" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="350.0" promptText="confirm password" style="-jfx-focus-color: linear-gradient(#FFB900, #F0D801);" styleClass="input_text" unFocusColor="#4d4d4d" />
                                                                      </children>
                                                                   </StackPane>
                                                                   <JFXButton fx:id="hideShowSiriBtn2" onAction="#show_or_hide_password" prefHeight="0.0" prefWidth="124.0" ripplerFill="#aeaeae" text="Show password">
@@ -224,7 +226,7 @@
                                                                   </JFXButton>
                                                                </children>
                                                             </VBox>
-                                                            <JFXButton onAction="#update_account_details" prefHeight="50.0" prefWidth="426.0" ripplerFill="#ffd29e" style="-fx-background-radius: 2px; -fx-border-radius: 2px; -fx-border-color: #dd7600; -fx-border-width: 2px;" text="Save" textFill="#dd7600">
+                                                            <JFXButton onAction="#update_account_details" prefHeight="51.0" prefWidth="426.0" ripplerFill="#ffd29e" style="-fx-background-radius: 2px; -fx-border-radius: 2px; -fx-border-color: linear-gradient(#FFB900, #F0D801); -fx-border-width: 2px; -fx-text-fill: linear-gradient(#FFB900, #F0D801);" text="Save" textFill="#dd7600">
                                                                <styleClass>
                                                                   <String fx:value="handCursor" />
                                                                   <String fx:value="menu_buttons" />
@@ -262,26 +264,26 @@
                                                 </HBox>
                                              </children>
                                           </VBox>
-                                          <JFXComboBox fx:id="prodRatingsCbx" focusColor="#e27b00" layoutX="605.0" layoutY="289.0" prefHeight="40.0" prefWidth="213.0" promptText="ratings">
+                                          <JFXComboBox fx:id="prodRatingsCbx" focusColor="#e27b00" layoutX="605.0" layoutY="289.0" prefHeight="40.0" prefWidth="213.0" promptText="ratings" style="-jfx-focus-color: linear-gradient(#FFB900, #F0D801);">
                                              <styleClass>
                                                 <String fx:value="input_text" />
                                                 <String fx:value="handCursor" />
                                              </styleClass>
                                           </JFXComboBox>
-                                          <JFXButton buttonType="RAISED" layoutX="488.0" layoutY="821.0" onAction="#upload_product" prefHeight="50.0" prefWidth="176.0" ripplerFill="#ffd29e" style="-fx-background-radius: 2px; -fx-border-radius: 2px; -fx-border-color: #dd7600; -fx-border-width: 2px; -fx-background-color: rgb(255, 255, 255);" text="Upload" textFill="#dd7600">
+                                          <JFXButton buttonType="RAISED" layoutX="488.0" layoutY="821.0" onAction="#upload_product" prefHeight="50.0" prefWidth="176.0" ripplerFill="#ffd29e" style="-fx-background-radius: 2px; -fx-border-radius: 2px; -fx-border-color: linear-gradient(#FFB900, #F0D801); -fx-border-width: 2px; -fx-background-color: rgb(255, 255, 255); -fx-text-fill: linear-gradient(#FFB900, #F0D801);" text="Upload" textFill="#dd7600">
                                              <styleClass>
                                                 <String fx:value="handCursor" />
                                                 <String fx:value="menu_buttons" />
                                              </styleClass>
                                           </JFXButton>
-                                          <VBox layoutX="290.0" layoutY="150.0" prefHeight="300.0" prefWidth="235.0">
+                                          <VBox layoutX="186.0" layoutY="139.0" prefHeight="300.0" prefWidth="280.0">
                                              <children>
-                                                <ImageView fx:id="prodView" fitHeight="251.0" fitWidth="235.0" pickOnBounds="true">
+                                                <ImageView fx:id="prodView" fitHeight="251.0" fitWidth="284.0" pickOnBounds="true">
                                                    <image>
                                                       <Image url="@../_images/_icons/noimage.png" />
                                                    </image>
                                                 </ImageView>
-                                                <JFXButton onAction="#choose_image_from_local_drive" prefHeight="50.0" prefWidth="255.0" ripplerFill="#ffd29e" style="-fx-background-radius: 0px; -fx-background-color: #dd7600;" text="choose image" textFill="WHITE">
+                                                <JFXButton onAction="#choose_image_from_local_drive" prefHeight="50.0" prefWidth="285.0" ripplerFill="#ffd29e" style="-fx-background-radius: 0px; -fx-background-color: rgb(0, 0, 0);" text="choose image" textFill="WHITE">
                                                    <styleClass>
                                                       <String fx:value="handCursor" />
                                                       <String fx:value="menu_buttons" />
@@ -289,7 +291,7 @@
                                                 </JFXButton>
                                              </children>
                                              <effect>
-                                                <DropShadow color="#00000049" height="30.0" offsetY="10.0" radius="14.5" spread="0.06" width="30.0" />
+                                                <DropShadow blurType="GAUSSIAN" color="#00000049" height="56.69" offsetY="10.0" radius="20.43" spread="0.06" width="27.03" />
                                              </effect>
                                           </VBox>
                                        </children>
@@ -332,7 +334,7 @@
                                  <children>
                                     <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                        <children>
-                                          <StackPane layoutX="36.0" layoutY="42.0" prefHeight="260.0" prefWidth="373.0">
+                                          <StackPane layoutX="36.0" layoutY="42.0" prefHeight="300.0" prefWidth="373.0">
                                              <children>
                                                 <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                                    <children>
@@ -342,11 +344,11 @@
                                                             <String fx:value="handCursor" />
                                                          </styleClass>
                                                       </JFXComboBox>
-                                                      <VBox layoutX="14.0" layoutY="104.0" spacing="10.0">
+                                                      <VBox layoutX="13.0" layoutY="136.0" prefHeight="154.0" prefWidth="347.0" spacing="20.0">
                                                          <children>
                                                             <Label prefHeight="28.0" prefWidth="325.0" styleClass="questions" text="How much would you like to charge?" textFill="#dd7600" />
                                                             <JFXTextField fx:id="serviceCostTF" focusColor="#dd7600" prefHeight="40.0" prefWidth="259.0" promptText="cost" styleClass="answers" unFocusColor="#4d4d4d" />
-                                                            <JFXButton onAction="#add_to_cart" prefHeight="42.0" prefWidth="149.0" ripplerFill="#ffd5a6" style="-fx-background-color: #dd7600; -fx-background-radius: 0px;" text="Add to cart" textFill="WHITE">
+                                                            <JFXButton onAction="#add_to_cart" prefHeight="48.0" prefWidth="348.0" ripplerFill="#8c8c8c" style="-fx-background-color: rgb(0, 0, 0); -fx-background-radius: 0px;" text="Add to cart" textFill="WHITE">
                                                                <styleClass>
                                                                   <String fx:value="handCursor" />
                                                                   <String fx:value="menu_buttons" />
@@ -369,7 +371,7 @@
                                           <HBox alignment="CENTER_LEFT" layoutX="43.0" layoutY="20.0" prefHeight="42.0" prefWidth="373.0" spacing="10.0" style="-fx-background-color: rgb(241, 241, 241); -fx-background-radius: 5px;">
                                              <children>
                                                 <OctIconView fill="GREY" glyphName="SEARCH" size="20" />
-                                                <JFXTextField fx:id="productSerial" focusColor="#dd760000" onAction="#search_for_product" prefHeight="50.0" prefWidth="322.0" promptText="serial number" styleClass="input_text" unFocusColor="#80808000">
+                                                <JFXTextField fx:id="productSerial" focusColor="#d9700000" onAction="#search_for_product" prefHeight="50.0" prefWidth="322.0" promptText="serial number" styleClass="input_text" unFocusColor="#80808000">
                                                    <HBox.margin>
                                                       <Insets />
                                                    </HBox.margin>
@@ -379,8 +381,8 @@
                                                 <Insets left="10.0" right="10.0" />
                                              </padding>
                                           </HBox>
-                                          <Label id="result" layoutX="183.0" layoutY="82.0" text="Result" textFill="#662f01" />
-                                          <ImageView fx:id="productView" fitHeight="241.0" fitWidth="235.0" layoutX="89.0" layoutY="110.0" pickOnBounds="true" />
+                                          <Label id="result" layoutX="188.0" layoutY="84.0" text="Result" textFill="#662f01" />
+                                          <ImageView fx:id="productView" fitHeight="241.0" fitWidth="297.0" layoutX="63.0" layoutY="111.0" pickOnBounds="true" />
                                           <VBox layoutX="57.0" layoutY="371.0" prefHeight="250.0" prefWidth="381.0" spacing="20.0">
                                              <children>
                                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
@@ -447,7 +449,7 @@
                                                 <JFXTextField fx:id="sellingPriceTF" focusColor="#dd7600" prefHeight="40.0" prefWidth="325.0" promptText="selling price" styleClass="answers" unFocusColor="#4d4d4d" />
                                              </children>
                                           </VBox>
-                                          <JFXButton fx:id="fromProduct" layoutX="47.0" layoutY="824.0" onAction="#add_to_cart" prefHeight="42.0" prefWidth="325.0" ripplerFill="#ffd5a5" style="-fx-background-color: #dd7600; -fx-background-radius: 0px;" text="Add to cart" textFill="WHITE">
+                                          <JFXButton fx:id="fromProduct" layoutX="47.0" layoutY="824.0" onAction="#add_to_cart" prefHeight="48.0" prefWidth="325.0" ripplerFill="#8c8c8c" style="-fx-background-color: rgb(0, 0, 0); -fx-background-radius: 0px;" text="Add to cart" textFill="WHITE">
                                              <styleClass>
                                                 <String fx:value="handCursor" />
                                                 <String fx:value="menu_buttons" />
@@ -469,31 +471,31 @@
                                  <children>
                                     <VBox prefHeight="300.0" prefWidth="289.0">
                                        <children>
-                                          <JFXButton fx:id="productBtn" onAction="#show_products" prefHeight="60.0" prefWidth="289.0" ripplerFill="#ffd5a500" style="-fx-background-color: #662f01; -fx-background-radius: 0px;" text="Products" textFill="WHITE">
+                                          <JFXButton fx:id="productBtn" onAction="#show_products" prefHeight="60.0" prefWidth="289.0" ripplerFill="#ffd5a500" style="-fx-background-color: linear-gradient(#FFB900, #F0D801); -fx-background-radius: 0px;" text="Products" textFill="#8e4b02">
                                              <styleClass>
                                                 <String fx:value="handCursor" />
                                                 <String fx:value="menu_buttons" />
                                              </styleClass>
                                           </JFXButton>
-                                          <JFXButton layoutX="10.0" layoutY="10.0" onAction="#show_services" prefHeight="60.0" prefWidth="290.0" ripplerFill="#ffd5a500" style="-fx-background-radius: 0px;" text="Services" textFill="#662f01">
+                                          <JFXButton layoutX="10.0" layoutY="10.0" onAction="#show_services" prefHeight="60.0" prefWidth="290.0" ripplerFill="#ffd5a500" style="-fx-background-radius: 0px;" text="Services" textFill="#868686">
                                              <styleClass>
                                                 <String fx:value="handCursor" />
                                                 <String fx:value="menu_buttons" />
                                              </styleClass>
                                           </JFXButton>
-                                          <JFXButton layoutX="10.0" layoutY="70.0" onAction="#show_stock_page" prefHeight="60.0" prefWidth="288.0" ripplerFill="#ffd5a500" style="-fx-background-radius: 0px;" text="Peek at stock" textFill="#662f01">
+                                          <JFXButton layoutX="10.0" layoutY="70.0" onAction="#show_stock_page" prefHeight="60.0" prefWidth="288.0" ripplerFill="#ffd5a500" style="-fx-background-radius: 0px;" text="Peek at stock" textFill="#868686">
                                              <styleClass>
                                                 <String fx:value="handCursor" />
                                                 <String fx:value="menu_buttons" />
                                              </styleClass>
                                           </JFXButton>
-                                          <JFXButton layoutX="10.0" layoutY="130.0" onAction="#show_add_stock_page" prefHeight="60.0" prefWidth="288.0" ripplerFill="#ffd5a500" style="-fx-background-radius: 0px;" text="Add item" textFill="#662f01">
+                                          <JFXButton layoutX="10.0" layoutY="130.0" onAction="#show_add_stock_page" prefHeight="60.0" prefWidth="288.0" ripplerFill="#ffd5a500" style="-fx-background-radius: 0px;" text="Add item" textFill="#868686">
                                              <styleClass>
                                                 <String fx:value="handCursor" />
                                                 <String fx:value="menu_buttons" />
                                              </styleClass>
                                           </JFXButton>
-                                          <JFXButton layoutX="10.0" layoutY="35.0" onAction="#show_my_account" prefHeight="60.0" prefWidth="290.0" ripplerFill="#ffd5a500" style="-fx-background-radius: 0px;" text="My account" textFill="#662f01">
+                                          <JFXButton layoutX="10.0" layoutY="35.0" onAction="#show_my_account" prefHeight="60.0" prefWidth="290.0" ripplerFill="#ffd5a500" style="-fx-background-radius: 0px;" text="My account" textFill="#868686">
                                              <styleClass>
                                                 <String fx:value="handCursor" />
                                                 <String fx:value="menu_buttons" />
@@ -501,7 +503,7 @@
                                           </JFXButton>
                                        </children>
                                     </VBox>
-                                    <JFXButton onAction="#log_out_from_my_account" prefHeight="46.0" prefWidth="266.0" ripplerFill="#fca1a1" style="-fx-background-radius: 0px; -fx-border-color: #cc0c0c; -fx-border-radius: 0px;" text="Log out" textFill="#cc0c0c">
+                                    <JFXButton onAction="#log_out_from_my_account" prefHeight="46.0" prefWidth="216.0" ripplerFill="#fca1a1" style="-fx-background-radius: 0px; -fx-border-color: #cc0c0c; -fx-border-radius: 0px;" text="Log out" textFill="#cc0c0c">
                                        <styleClass>
                                           <String fx:value="handCursor" />
                                           <String fx:value="menu_buttons" />
@@ -525,7 +527,7 @@
             </AnchorPane>
          </children>
       </StackPane>
-      <StackPane fx:id="phaseOne" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1440.0" style="-fx-background-color: rgb(255, 255, 255);" stylesheets="@../_css/phaseOne.css">
+      <StackPane fx:id="phaseOne" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1440.0" style="-fx-background-color: rgb(255, 255, 255);" stylesheets="@../_css/phaseOne.css">
          <children>
             <StackPane fx:id="loginPane" alignment="TOP_CENTER" opacity="0.0" prefHeight="150.0" prefWidth="200.0">
                <children>
@@ -541,7 +543,7 @@
                      <children>
                         <Group layoutX="545.0" layoutY="341.0">
                            <children>
-                              <JFXTextField fx:id="usernameTF" focusColor="#405aa800" layoutY="8.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="350.0" style="-fx-border-color: #E27B00; -fx-border-radius: 5px; -fx-background-radius: 5px; -fx-border-width: 2px;" styleClass="input_text" unFocusColor="#4d4d4d00">
+                              <JFXTextField fx:id="usernameTF" focusColor="#405aa800" layoutY="8.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="350.0" style="-fx-border-color: linear-gradient(#FFB900, #F0D801); -fx-border-radius: 5px; -fx-background-radius: 5px; -fx-border-width: 2px;" styleClass="input_text" unFocusColor="#4d4d4d00">
                                  <padding>
                                     <Insets left="10.0" right="10.0" />
                                  </padding>
@@ -551,7 +553,7 @@
                         </Group>
                         <Group layoutX="545.0" layoutY="429.0">
                            <children>
-                              <StackPane layoutY="8.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="350.0" style="-fx-border-color: #E27B00; -fx-border-radius: 5px; -fx-border-width: 2px;">
+                              <StackPane layoutY="8.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="350.0" style="-fx-border-color: linear-gradient(#FFB900, #F0D801); -fx-border-radius: 5px; -fx-border-width: 2px;">
                                  <children>
                                     <JFXTextField fx:id="plainSiriTF" focusColor="#405aa800" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="50.0" prefWidth="350.0" styleClass="input_text" unFocusColor="#4d4d4d00">
                                        <padding>
@@ -575,7 +577,16 @@
                            </children>
                         </Group>
                         <JFXButton id="show_hide_password" fx:id="hideShowSiriBtn" layoutX="771.0" layoutY="505.0" onAction="#show_or_hide_password" prefHeight="34.0" prefWidth="124.0" ripplerFill="#aeaeae" styleClass="handCursor" text="Show password" />
-                        <JFXButton id="login_btn" layoutX="545.0" layoutY="573.0" onAction="#allow_user_to_login" prefHeight="50.0" prefWidth="350.0" ripplerFill="#ffd5a5" style="-fx-border-color: #E27B00; -fx-border-radius: 5px; -fx-background-radius: 5px; -fx-border-width: 2px;" styleClass="handCursor" text="Login" textFill="#e27b00" />
+                        <JFXButton id="login_btn" layoutX="545.0" layoutY="573.0" onAction="#allow_user_to_login" prefHeight="50.0" prefWidth="350.0" ripplerFill="#ffd29e" style="-fx-border-color: linear-gradient(#FFB900, #F0D801); -fx-border-radius: 5px; -fx-background-radius: 5px; -fx-border-width: 2px; -fx-text-fill: linear-gradient(#FFB900, #F0D801);" styleClass="handCursor" text="Login">
+                           <textFill>
+                              <LinearGradient endX="1.0" endY="1.0">
+                                 <stops>
+                                    <Stop color="BLACK" />
+                                    <Stop color="WHITE" offset="1.0" />
+                                 </stops>
+                              </LinearGradient>
+                           </textFill>
+                        </JFXButton>
                         <JFXButton id="forgot_password_btn" layoutX="589.0" layoutY="823.0" onAction="#reset_user_password" prefHeight="43.0" prefWidth="262.0" ripplerFill="#a8a8a8" styleClass="handCursor" text="Can't remember your password ?" textFill="#686868" />
                      </children>
                   </AnchorPane>
@@ -587,9 +598,6 @@
                      <image>
                         <Image url="@../_images/_background/splashScreen.png" />
                      </image>
-                     <StackPane.margin>
-                        <Insets top="2.0" />
-                     </StackPane.margin>
                   </ImageView>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0">
                      <children>

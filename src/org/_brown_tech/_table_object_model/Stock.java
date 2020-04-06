@@ -1,5 +1,6 @@
 package org._brown_tech._table_object_model;
 
+import com.google.gson.Gson;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -90,14 +91,6 @@ public class Stock extends RecursiveTreeObject<Stock> implements Serializable {
 
     @Override
     public String toString() {
-        return "Stock{" +
-                "serial=" + serial +
-                ", name=" + name +
-                ", description=" + description +
-                ", imageview=" + imageview +
-                ", quantity=" + quantity +
-                ", markedPrice=" + markedPrice +
-                ", status=" + status +
-                '}';
+        return new Gson().toJson(this, Stock.class);
     }
 }

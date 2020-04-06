@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.effect.DropShadow?>
@@ -9,6 +10,7 @@
 <?import javafx.scene.layout.StackPane?>
 
 <!--suppress JavaFxDefaultTag -->
+
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="47.0" prefWidth="554.0" style="-fx-background-color: rgb(255, 255, 255); -fx-background-radius: 2px;" stylesheets="@../_css/cartItem.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org._brown_tech._controller.CartItemUI">
    <children>
       <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="44.0" prefWidth="555.0">
@@ -16,18 +18,21 @@
             <Label fx:id="nameLbl" layoutX="14.0" layoutY="13.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="19.0" prefWidth="249.0" styleClass="name" wrapText="true" />
             <Label fx:id="quantityLbl" layoutX="299.0" layoutY="13.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="19.0" prefWidth="63.0" styleClass="quantity" wrapText="true" />
             <Label fx:id="costLbl" layoutX="398.0" layoutY="13.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="19.0" prefWidth="101.0" styleClass="cost" wrapText="true" />
-            <JFXButton contentDisplay="GRAPHIC_ONLY" layoutX="517.0" layoutY="7.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#delete_item" prefHeight="30.0" prefWidth="30.0" ripplerFill="#653939">
+            <JFXButton contentDisplay="GRAPHIC_ONLY" layoutX="517.0" layoutY="7.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#delete_item" prefHeight="30.0" prefWidth="30.0" ripplerFill="#e48080">
                <graphic>
                   <MaterialDesignIconView fill="#e42828" glyphName="WINDOW_CLOSE" size="20" />
                </graphic>
                <tooltip>
                   <Tooltip styleClass="tooltipText" text="Click to remove" />
                </tooltip>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </JFXButton>
          </children>
       </AnchorPane>
    </children>
    <effect>
-      <DropShadow color="#f1e003" height="8.895" radius="1.72375" spread="0.2" width="0.0" />
+      <DropShadow color="#52525280" height="4.45" radius="0.6125" spread="0.2" width="0.0" />
    </effect>
 </StackPane>

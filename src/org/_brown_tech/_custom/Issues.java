@@ -82,7 +82,7 @@ public class Issues extends Brain {
                     if (log.canWrite() & log.canRead()) {
                         FileWriter fw = new FileWriter(log, true);
                         bw = new BufferedWriter(fw);
-                        bw.write("\nThis is a newly created file [ " + timeStamp() + " ].");
+                        bw.write("\nThis is a newly created file [ " + time_stamp() + " ].");
                     }
                 }
             }
@@ -100,7 +100,7 @@ public class Issues extends Brain {
                     bw.close();
                 }
             } catch (Exception ex) {
-                new Thread(write_log("\n\n" + timeStamp() + ": The following Exception occurred,\n" + ex, 1)).start();
+                new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + ex, 1)).start();
                 new Thread(stack_trace_printing(ex.getStackTrace())).start();
                 ex.printStackTrace();
                 programmer_error(ex).show();
@@ -117,7 +117,7 @@ public class Issues extends Brain {
                     if (log.canWrite() & log.canRead()) {
                         FileWriter fw = new FileWriter(log, true);
                         bw = new BufferedWriter(fw);
-                        bw.write("\nThis is a newly created file [ " + timeStamp() + " ].");
+                        bw.write("\nThis is a newly created file [ " + time_stamp() + " ].");
                     }
                 }
             }
@@ -136,7 +136,7 @@ public class Issues extends Brain {
                     bw.close();
                 }
             } catch (Exception ex) {
-                new Thread(write_log("\n\n" + timeStamp() + ": The following Exception occurred,\n" + ex, 1)).start();
+                new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + ex, 1)).start();
                 new Thread(stack_trace_printing(ex.getStackTrace())).start();
                 ex.printStackTrace();
                 programmer_error(ex).show();
@@ -153,7 +153,7 @@ public class Issues extends Brain {
                     if (log.canWrite() & log.canRead()) {
                         FileWriter fw = new FileWriter(log, true);
                         bw = new BufferedWriter(fw);
-                        bw.write("\nThis is a newly created file [ " + timeStamp() + " ].");
+                        bw.write("\nThis is a newly created file [ " + time_stamp() + " ].");
                     }
                 }
             }
@@ -161,11 +161,11 @@ public class Issues extends Brain {
                 FileWriter fw = new FileWriter(log, true);
                 bw = new BufferedWriter(fw);
                 for (StackTraceElement stackTraceElement : message) {
-                    bw.write("\n " + timeStamp() + "\n " + stackTraceElement.toString() + "\n ");
+                    bw.write("\n " + time_stamp() + "\n " + stackTraceElement.toString() + "\n ");
                 }
             }
         } catch (IOException ex) {
-            new Thread(write_log("\n\n" + timeStamp() + ": The following Exception occurred,\n" + ex, 1)).start();
+            new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + ex, 1)).start();
             new Thread(stack_trace_printing(ex.getStackTrace())).start();
             ex.printStackTrace();
             programmer_error(ex).show();
@@ -176,7 +176,7 @@ public class Issues extends Brain {
                     bw.close();
                 }
             } catch (Exception ex) {
-                new Thread(write_log("\n\n" + timeStamp() + ": The following Exception occurred,\n" + ex, 1)).start();
+                new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + ex, 1)).start();
                 new Thread(stack_trace_printing(ex.getStackTrace())).start();
                 ex.printStackTrace();
                 programmer_error(ex).show();
@@ -185,8 +185,10 @@ public class Issues extends Brain {
     }
 
     @NotNull
-    public final String timeStamp() {
-        return new SimpleDateFormat("dd-MMM-yyyy").format(Calendar.getInstance().getTime()) + " at " + new SimpleDateFormat("HH:mm:ss:SSS").format(Calendar.getInstance().getTime());
+    public final String time_stamp() {
+        return new SimpleDateFormat("dd-MMM-yyyy").format(Calendar.getInstance().getTime())
+                + " at " +
+                new SimpleDateFormat("HH:mm:ss:SSS").format(Calendar.getInstance().getTime());
     }
 
     public final Notifications information_message(String message) {
@@ -228,6 +230,7 @@ public class Issues extends Brain {
     @NotNull
     public final Alert error_message_alert(String header, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.initOwner(Main.stage);
         alert.setTitle("Brown tech encountered an Error");
         alert.setHeaderText(header);
         alert.setContentText(message);

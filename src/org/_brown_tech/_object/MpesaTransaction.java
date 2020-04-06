@@ -1,5 +1,7 @@
 package org._brown_tech._object;
 
+import com.google.gson.Gson;
+
 import java.io.Serializable;
 
 /**
@@ -56,11 +58,6 @@ public class MpesaTransaction implements Serializable {
 
     @Override
     public String toString() {
-        return "MpesaTransaction{" +
-                "transactionCode='" + transactionCode + '\'' +
-                ", customerName='" + customerName + '\'' +
-                ", phone='" + phone + '\'' +
-                ", amount=" + amount +
-                '}';
+        return new Gson().toJson(this, MpesaTransaction.class);
     }
 }

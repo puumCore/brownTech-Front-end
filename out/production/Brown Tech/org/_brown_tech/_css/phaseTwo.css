@@ -38,7 +38,7 @@
     -fx-font-size:  16px;
 }
 .answers {
-    -fx-font-family:  'Fira Sans';
+    -fx-font-family:  'Fira Sans Medium';
     -fx-font-size:  18px;
 }
 .plus_minus_btn {
@@ -73,7 +73,7 @@
     -fx-prompt-text-fill: #797979;
  }
  .jfx-combo-box .cell {
-    -fx-text-fill: rgb(24, 24, 24);
+    -fx-text-fill: rgb(0, 0, 0);
  }
  .scroll-pane {
     -fx-background-color: #f9f9f9;

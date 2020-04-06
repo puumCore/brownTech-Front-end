@@ -63,7 +63,7 @@ public class Brain {
                 allIsGood = true;
             }
         } catch (SQLException e) {
-            new Thread(new Issues().write_log("\n\n" + new Issues().timeStamp() + ": The following Exception occurred,\n" + e, 1)).start();
+            new Thread(new Issues().write_log("\n\n" + new Issues().time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
             new Thread(new Issues().stack_trace_printing(e.getStackTrace())).start();
             e.printStackTrace();
             new Issues().programmer_error(e).show();
@@ -91,6 +91,9 @@ public class Brain {
             Connection connection = connect_to_memory();
             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM _cart");
             preparedStatement.executeUpdate();
+            preparedStatement = connection.prepareStatement("DELETE FROM sqlite_sequence\n" +
+                    "      WHERE name = '_cart'");
+            preparedStatement.executeUpdate();
             preparedStatement.close();
             connection.close();
             final HashMap<Integer, CartItem> integerCartItemHashMap = get_all_cart_items();
@@ -101,7 +104,7 @@ public class Brain {
             }
             MainUI.cartItems = integerCartItemHashMap;
         } catch (SQLException e) {
-            new Thread(new Issues().write_log("\n\n" + new Issues().timeStamp() + ": The following Exception occurred,\n" + e, 1)).start();
+            new Thread(new Issues().write_log("\n\n" + new Issues().time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
             new Thread(new Issues().stack_trace_printing(e.getStackTrace())).start();
             e.printStackTrace();
             new Issues().programmer_error(e).show();
@@ -148,7 +151,7 @@ public class Brain {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            new Thread(new Issues().write_log("\n\n" + new Issues().timeStamp() + ": The following Exception occurred,\n" + e, 1)).start();
+            new Thread(new Issues().write_log("\n\n" + new Issues().time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
             new Thread(new Issues().stack_trace_printing(e.getStackTrace())).start();
             new Issues().programmer_error(e).show();
         }
@@ -190,7 +193,7 @@ public class Brain {
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            new Thread(new Issues().write_log("\n\n" + new Issues().timeStamp() + ": The following Exception occurred,\n" + e, 1)).start();
+            new Thread(new Issues().write_log("\n\n" + new Issues().time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
             new Thread(new Issues().stack_trace_printing(e.getStackTrace())).start();
             new Issues().programmer_error(e).show();
         }
@@ -214,7 +217,7 @@ public class Brain {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            new Thread(new Issues().write_log("\n\n" + new Issues().timeStamp() + ": The following Exception occurred,\n" + e, 1)).start();
+            new Thread(new Issues().write_log("\n\n" + new Issues().time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
             new Thread(new Issues().stack_trace_printing(e.getStackTrace())).start();
             new Issues().programmer_error(e).show();
         }
@@ -238,7 +241,7 @@ public class Brain {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            new Thread(new Issues().write_log("\n\n" + new Issues().timeStamp() + ": The following Exception occurred,\n" + e, 1)).start();
+            new Thread(new Issues().write_log("\n\n" + new Issues().time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
             new Thread(new Issues().stack_trace_printing(e.getStackTrace())).start();
             new Issues().programmer_error(e).show();
         }
@@ -262,7 +265,7 @@ public class Brain {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            new Thread(new Issues().write_log("\n\n" + new Issues().timeStamp() + ": The following Exception occurred,\n" + e, 1)).start();
+            new Thread(new Issues().write_log("\n\n" + new Issues().time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
             new Thread(new Issues().stack_trace_printing(e.getStackTrace())).start();
             new Issues().programmer_error(e).show();
         }
@@ -286,7 +289,7 @@ public class Brain {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            new Thread(new Issues().write_log("\n\n" + new Issues().timeStamp() + ": The following Exception occurred,\n" + e, 1)).start();
+            new Thread(new Issues().write_log("\n\n" + new Issues().time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
             new Thread(new Issues().stack_trace_printing(e.getStackTrace())).start();
             new Issues().programmer_error(e).show();
         }
@@ -310,7 +313,7 @@ public class Brain {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            new Thread(new Issues().write_log("\n\n" + new Issues().timeStamp() + ": The following Exception occurred,\n" + e, 1)).start();
+            new Thread(new Issues().write_log("\n\n" + new Issues().time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
             new Thread(new Issues().stack_trace_printing(e.getStackTrace())).start();
             new Issues().programmer_error(e).show();
         }
@@ -338,7 +341,7 @@ public class Brain {
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            new Thread(new Issues().write_log("\n\n" + new Issues().timeStamp() + ": The following Exception occurred,\n" + e, 1)).start();
+            new Thread(new Issues().write_log("\n\n" + new Issues().time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
             new Thread(new Issues().stack_trace_printing(e.getStackTrace())).start();
             new Issues().programmer_error(e).show();
         }
@@ -364,7 +367,7 @@ public class Brain {
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            new Thread(new Issues().write_log("\n\n" + new Issues().timeStamp() + ": The following Exception occurred,\n" + e, 1)).start();
+            new Thread(new Issues().write_log("\n\n" + new Issues().time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
             new Thread(new Issues().stack_trace_printing(e.getStackTrace())).start();
             new Issues().programmer_error(e).show();
         }
@@ -386,7 +389,7 @@ public class Brain {
                 fileReader.close();
             } catch (IOException e) {
                 e.printStackTrace();
-                new Thread(new Issues().write_log("\n\n" + new Issues().timeStamp() + ": The following Exception occurred,\n" + e, 1)).start();
+                new Thread(new Issues().write_log("\n\n" + new Issues().time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
                 new Thread(new Issues().stack_trace_printing(e.getStackTrace())).start();
                 new Issues().programmer_error(e).show();
             }
@@ -402,7 +405,7 @@ public class Brain {
                 fileReader.close();
             } catch (IOException e) {
                 e.printStackTrace();
-                new Thread(new Issues().write_log("\n\n" + new Issues().timeStamp() + ": The following Exception occurred,\n" + e, 1)).start();
+                new Thread(new Issues().write_log("\n\n" + new Issues().time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
                 new Thread(new Issues().stack_trace_printing(e.getStackTrace())).start();
                 new Issues().programmer_error(e).show();
             }
@@ -436,7 +439,7 @@ public class Brain {
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    new Thread(new Issues().write_log("\n\n" + new Issues().timeStamp() + ": The following Exception occurred,\n" + e, 1)).start();
+                    new Thread(new Issues().write_log("\n\n" + new Issues().time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
                     new Thread(new Issues().stack_trace_printing(e.getStackTrace())).start();
                     new Issues().programmer_error(e).show();
                     allIsGood = false;
@@ -464,7 +467,7 @@ public class Brain {
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            new Thread(new Issues().write_log("\n\n" + new Issues().timeStamp() + ": The following Exception occurred,\n" + e, 1)).start();
+            new Thread(new Issues().write_log("\n\n" + new Issues().time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
             new Thread(new Issues().stack_trace_printing(e.getStackTrace())).start();
             new Issues().programmer_error(e).show();
         }
@@ -505,7 +508,7 @@ public class Brain {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            new Thread(new Issues().write_log("\n\n" + new Issues().timeStamp() + ": The following Exception occurred,\n" + e, 1)).start();
+            new Thread(new Issues().write_log("\n\n" + new Issues().time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
             new Thread(new Issues().stack_trace_printing(e.getStackTrace())).start();
             new Issues().programmer_error(e).show();
         }
@@ -546,7 +549,7 @@ public class Brain {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            new Thread(new Issues().write_log("\n\n" + new Issues().timeStamp() + ": The following Exception occurred,\n" + e, 1)).start();
+            new Thread(new Issues().write_log("\n\n" + new Issues().time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
             new Thread(new Issues().stack_trace_printing(e.getStackTrace())).start();
             new Issues().programmer_error(e).show();
         }
@@ -578,7 +581,7 @@ public class Brain {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            new Thread(new Issues().write_log("\n\n" + new Issues().timeStamp() + ": The following Exception occurred,\n" + e, 1)).start();
+            new Thread(new Issues().write_log("\n\n" + new Issues().time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
             new Thread(new Issues().stack_trace_printing(e.getStackTrace())).start();
             new Issues().programmer_error(e).show();
         }
@@ -613,7 +616,7 @@ public class Brain {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            new Thread(new Issues().write_log("\n\n" + new Issues().timeStamp() + ": The following Exception occurred,\n" + e, 1)).start();
+            new Thread(new Issues().write_log("\n\n" + new Issues().time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
             new Thread(new Issues().stack_trace_printing(e.getStackTrace())).start();
             new Issues().programmer_error(e).show();
         }
@@ -669,7 +672,7 @@ public class Brain {
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
-                new Thread(new Issues().write_log("\n\n" + new Issues().timeStamp() + ": The following Exception occurred,\n" + e, 1)).start();
+                new Thread(new Issues().write_log("\n\n" + new Issues().time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
                 new Thread(new Issues().stack_trace_printing(e.getStackTrace())).start();
                 new Issues().programmer_error(e).show();
                 allIsGood = false;
@@ -710,7 +713,7 @@ public class Brain {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            new Thread(new Issues().write_log("\n\n" + new Issues().timeStamp() + ": The following Exception occurred,\n" + e, 1)).start();
+            new Thread(new Issues().write_log("\n\n" + new Issues().time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
             new Thread(new Issues().stack_trace_printing(e.getStackTrace())).start();
             new Issues().programmer_error(e).show();
         }
@@ -732,7 +735,7 @@ public class Brain {
             });
         } catch (IOException e) {
             e.printStackTrace();
-            new Thread(new Issues().write_log("\n\n" + new Issues().timeStamp() + ": The following Exception occurred,\n" + e, 1)).start();
+            new Thread(new Issues().write_log("\n\n" + new Issues().time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
             new Thread(new Issues().stack_trace_printing(e.getStackTrace())).start();
             new Issues().programmer_error(e).show();
         }
@@ -768,7 +771,7 @@ public class Brain {
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            new Thread(new Issues().write_log("\n\n" + new Issues().timeStamp() + ": The following Exception occurred,\n" + e, 1)).start();
+            new Thread(new Issues().write_log("\n\n" + new Issues().time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
             new Thread(new Issues().stack_trace_printing(e.getStackTrace())).start();
             new Issues().programmer_error(e).show();
         }
@@ -789,7 +792,7 @@ public class Brain {
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            new Thread(new Issues().write_log("\n\n" + new Issues().timeStamp() + ": The following Exception occurred,\n" + e, 1)).start();
+            new Thread(new Issues().write_log("\n\n" + new Issues().time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
             new Thread(new Issues().stack_trace_printing(e.getStackTrace())).start();
             new Issues().programmer_error(e).show();
         }
@@ -813,7 +816,7 @@ public class Brain {
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            new Thread(new Issues().write_log("\n\n" + new Issues().timeStamp() + ": The following Exception occurred,\n" + e, 1)).start();
+            new Thread(new Issues().write_log("\n\n" + new Issues().time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
             new Thread(new Issues().stack_trace_printing(e.getStackTrace())).start();
             new Issues().programmer_error(e).show();
         }
@@ -822,38 +825,94 @@ public class Brain {
 
     public final Boolean add_product_or_service_to_cart(@NotNull final CartItem cartItem) {
         boolean it_is_done = false;
+        Product product = null;
+        OnlineService onlineService = null;
+        boolean theQuantityIsBeyondStock = false;
+        if (cartItem.getProduct()) {
+            product = get_details_of_a_product(cartItem.getProductOrServiceSerial());
+        } else {
+            onlineService = get_selected_service(cartItem.getName());
+        }
         try {
             Connection connection = connect_to_memory();
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO _cart (\n" +
-                    "                      isProduct,\n" +
-                    "                      price,\n" +
-                    "                      quantity,\n" +
-                    "                      name,\n" +
-                    "                      p_s_serial\n" +
-                    "                  )\n" +
-                    "                  VALUES (\n" +
-                    "                      ?,\n" +
-                    "                      ?,\n" +
-                    "                      ?,\n" +
-                    "                      ?,\n" +
-                    "                      ?\n" +
-                    "                  )");
-            preparedStatement.setBoolean(1, cartItem.getProduct());
-            preparedStatement.setDouble(2, cartItem.getPrice());
-            preparedStatement.setInt(3, cartItem.getQuantityRequested());
-            preparedStatement.setString(4, cartItem.getName());
-            preparedStatement.setString(5, cartItem.getProductOrServiceSerial());
-            final int executionStatus = preparedStatement.executeUpdate();
+            PreparedStatement preparedStatement;
+            preparedStatement = connection.prepareStatement("SELECT quantity,\n" +
+                    "       price\n" +
+                    "  FROM _cart\n" +
+                    " WHERE p_s_serial = '" + cartItem.getProductOrServiceSerial() + "'");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                if (product != null) {
+                    cartItem.setQuantityRequested((cartItem.getQuantityRequested() + resultSet.getInt(1)));
+                    cartItem.setPrice((cartItem.getPrice() + resultSet.getDouble(2)));
+                    if (cartItem.getQuantityRequested() <= product.getStockQuantity()) {
+                        preparedStatement = connection.prepareStatement("UPDATE _cart\n" +
+                                "   SET quantity = ?,\n" +
+                                "       price = ?\n" +
+                                " WHERE p_s_serial = '" + cartItem.getProductOrServiceSerial() + "'");
+                        preparedStatement.setInt(1, cartItem.getQuantityRequested());
+                        preparedStatement.setDouble(2, cartItem.getPrice());
+                        final int executionStatus = preparedStatement.executeUpdate();
+                        if (executionStatus > 0) {
+                            it_is_done = true;
+                        }
+                    } else  {
+                        theQuantityIsBeyondStock = true;
+                        it_is_done = true;
+                    }
+                } else {
+                    if (onlineService != null) {
+                        cartItem.setQuantityRequested((cartItem.getQuantityRequested() + resultSet.getInt(1)));
+                        cartItem.setPrice((cartItem.getPrice() + resultSet.getDouble(2)));
+                        preparedStatement = connection.prepareStatement("UPDATE _cart\n" +
+                                "   SET quantity = ?,\n" +
+                                "       price = ?\n" +
+                                " WHERE p_s_serial = '" + cartItem.getProductOrServiceSerial() + "'");
+                        preparedStatement.setInt(1, cartItem.getQuantityRequested());
+                        preparedStatement.setDouble(2, cartItem.getPrice());
+                        final int executionStatus = preparedStatement.executeUpdate();
+                        if (executionStatus > 0) {
+                            it_is_done = true;
+                        }
+                    }
+                }
+            } else {
+                preparedStatement = connection.prepareStatement("INSERT INTO _cart (\n" +
+                        "                      isProduct,\n" +
+                        "                      price,\n" +
+                        "                      quantity,\n" +
+                        "                      name,\n" +
+                        "                      p_s_serial\n" +
+                        "                  )\n" +
+                        "                  VALUES (\n" +
+                        "                      ?,\n" +
+                        "                      ?,\n" +
+                        "                      ?,\n" +
+                        "                      ?,\n" +
+                        "                      ?\n" +
+                        "                  )");
+                preparedStatement.setBoolean(1, cartItem.getProduct());
+                preparedStatement.setDouble(2, cartItem.getPrice());
+                preparedStatement.setInt(3, cartItem.getQuantityRequested());
+                preparedStatement.setString(4, cartItem.getName());
+                preparedStatement.setString(5, cartItem.getProductOrServiceSerial());
+                final int executionStatus = preparedStatement.executeUpdate();
+                if (executionStatus > 0) {
+                    it_is_done = true;
+                }
+            }
+            resultSet.close();
             preparedStatement.close();
             connection.close();
-            if (executionStatus > 0) {
-                it_is_done = true;
-            }
         } catch (SQLException e) {
             e.printStackTrace();
-            new Thread(new Issues().write_log("\n\n" + new Issues().timeStamp() + ": The following Exception occurred,\n" + e, 1)).start();
+            new Thread(new Issues().write_log("\n\n" + new Issues().time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
             new Thread(new Issues().stack_trace_printing(e.getStackTrace())).start();
             new Issues().programmer_error(e).show();
+        } finally {
+            if (theQuantityIsBeyondStock) {
+                new Issues().error_message_alert("Failed!", "I could not increase the quantity of the requested item because the stock can only provide a maximum of " + product.getStockQuantity() + " only.").show();
+            }
         }
         return it_is_done;
     }
@@ -898,7 +957,7 @@ public class Brain {
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            new Thread(new Issues().write_log("\n\n" + new Issues().timeStamp() + ": The following Exception occurred,\n" + e, 1)).start();
+            new Thread(new Issues().write_log("\n\n" + new Issues().time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
             new Thread(new Issues().stack_trace_printing(e.getStackTrace())).start();
             new Issues().programmer_error(e).show();
         }
@@ -943,7 +1002,7 @@ public class Brain {
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            new Thread(new Issues().write_log("\n\n" + new Issues().timeStamp() + ": The following Exception occurred,\n" + e, 1)).start();
+            new Thread(new Issues().write_log("\n\n" + new Issues().time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
             new Thread(new Issues().stack_trace_printing(e.getStackTrace())).start();
             new Issues().programmer_error(e).show();
         }
@@ -971,7 +1030,7 @@ public class Brain {
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            new Thread(new Issues().write_log("\n\n" + new Issues().timeStamp() + ": The following Exception occurred,\n" + e, 1)).start();
+            new Thread(new Issues().write_log("\n\n" + new Issues().time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
             new Thread(new Issues().stack_trace_printing(e.getStackTrace())).start();
             new Issues().programmer_error(e).show();
         }
@@ -996,7 +1055,7 @@ public class Brain {
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            new Thread(new Issues().write_log("\n\n" + new Issues().timeStamp() + ": The following Exception occurred,\n" + e, 1)).start();
+            new Thread(new Issues().write_log("\n\n" + new Issues().time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
             new Thread(new Issues().stack_trace_printing(e.getStackTrace())).start();
             new Issues().programmer_error(e).show();
         }

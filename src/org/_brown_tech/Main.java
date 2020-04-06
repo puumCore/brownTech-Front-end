@@ -12,7 +12,7 @@ import java.io.File;
 
 public class Main extends Application {
 
-    public static final File RESOURCE_PATH = new File(System.getenv("JAVAFX_DEV_APP_HOME").concat("\\_brown_tech\\"));
+    public static final File RESOURCE_PATH = new File(System.getenv("JAVAFX_DEV_APP_HOME").concat("\\_brown_tech\\_pos\\"));
     private double xOffset;
     private double yOffset;
     public static Stage stage;

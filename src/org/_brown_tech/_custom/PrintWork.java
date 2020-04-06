@@ -79,18 +79,18 @@ public class PrintWork extends Issues {
             } catch (PrinterException ex) {
                 ex.printStackTrace();
                 Platform.runLater(() -> programmer_error(ex).show());
-                new Thread(write_log("\n\n" + timeStamp() + ": The following Exception occurred,\n" + ex, 1)).start();
+                new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + ex, 1)).start();
                 new Thread(stack_trace_printing(ex.getStackTrace())).start();
             }
         } catch (IllegalArgumentException ex) {
             ex.printStackTrace();
             Platform.runLater(() -> programmer_error(ex).show());
-            new Thread(write_log("\n\n" + timeStamp() + ": The following Exception occurred,\n" + ex, 1)).start();
+            new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + ex, 1)).start();
             new Thread(stack_trace_printing(ex.getStackTrace())).start();
         } catch (Exception ex) {
             ex.printStackTrace();
             programmer_error(ex).show();
-            new Thread(write_log("\n\n" + timeStamp() + ": The following Exception occurred,\n" + ex, 1)).start();
+            new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + ex, 1)).start();
             new Thread(stack_trace_printing(ex.getStackTrace())).start();
         }
     }

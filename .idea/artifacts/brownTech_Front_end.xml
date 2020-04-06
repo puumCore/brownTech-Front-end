@@ -1,0 +1,40 @@
+<component name="ArtifactManager">
+  <artifact type="javafx" name="brownTech Front end">
+    <output-path>$PROJECT_DIR$/out/artifacts/brownTech_Front_end</output-path>
+    <properties id="javafx-properties">
+      <options>
+        <option name="appClass" value="org._brown_tech.Main" />
+        <option name="convertCss2Bin" value="true" />
+        <option name="description" value="" />
+        <option name="htmlPlaceholderId" value="" />
+        <option name="nativeBundle" value="all" />
+        <option name="title" value="Brown tech FE" />
+        <option name="vendor" value="MandelaMuriithi" />
+        <option name="version" value="1.0.0" />
+      </options>
+    </properties>
+    <root id="root">
+      <element id="archive" name="Brown_Tech.jar">
+        <element id="module-output" name="brownTech Front end" />
+        <element id="directory" name="META-INF">
+          <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
+        </element>
+      </element>
+      <element id="directory" name="lib">
+        <element id="library" level="application" name="jfoenix-8.0.8" />
+        <element id="library" level="application" name="AnimateFX-1.2.0" />
+        <element id="library" level="application" name="annotations-17.0.0" />
+        <element id="library" level="application" name="controlsfx-8.40.11" />
+        <element id="library" level="application" name="httpclient JAR 4.5" />
+        <element id="library" level="application" name="sqlite-jdbc-3.23.1" />
+        <element id="library" level="application" name="fontawesomefx-8.9" />
+        <element id="library" level="application" name="json-simple-3.0.2" />
+        <element id="library" level="application" name="gson-2.8.2" />
+        <element id="library" level="application" name="json-simple-1.1.1" />
+        <element id="library" level="application" name="commons-io-2.6_COPY_FILES_FROM_PLACE_TO_PLACE" />
+        <element id="library" level="application" name="EMAIL" />
+        <element id="library" level="application" name="GEN RANDOM WORDS" />
+      </element>
+    </root>
+  </artifact>
+</component>

@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: org._brown_tech.Main
+Class-Path: org._brown_tech.**
+
