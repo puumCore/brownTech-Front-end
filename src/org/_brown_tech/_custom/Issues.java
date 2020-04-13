@@ -24,6 +24,7 @@ import java.util.Optional;
 /**
  * @author Mandela
  */
+
 public class Issues extends Brain {
 
     private final String pathToErrorFolder = Main.RESOURCE_PATH.getAbsolutePath() + "\\_watchDog\\_error";

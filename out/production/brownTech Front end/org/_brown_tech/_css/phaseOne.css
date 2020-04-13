@@ -1,0 +1,36 @@
+.progBar > .track, .progBar > .bar {
+    -fx-background-color-radius : 0;
+    -fx-background-insets: 0;
+}
+.progBar > .bar{
+    -fx-background-color: linear-gradient(#FFB900, #F0D801);
+}
+.progBar > .track { 
+    -fx-background-color: #FFFFFF;
+     -fx-opacity: 1.0;
+}
+.input_text {
+    -fx-font-family:  'Montserrat Medium';
+    -fx-font-size:  16px;
+    -fx-text-fill: #000000;
+    -fx-prompt-text-fill: rgb(255, 220, 176);
+}
+.label_text {
+    -fx-font-family:  'Montserrat';
+    -fx-font-size:  13px;
+}
+#show_hide_password, .loading_text {
+    -fx-font-family:  'Montserrat Medium';
+    -fx-font-size:  13px;
+}
+#login_btn {
+    -fx-font-family:  'Montserrat Semibold';
+    -fx-font-size:  20px;
+}
+#forgot_password_btn {
+    -fx-font-family:  'Montserrat Semibold';
+    -fx-font-size:  14px;
+}
+.handCursor {
+    -fx-cursor: hand;
+}

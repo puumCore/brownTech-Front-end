@@ -34,7 +34,7 @@ public class CartItemUI extends Issues implements Initializable {
     @FXML
     private void delete_item(ActionEvent event) {
         if (event != null) {
-            if (i_am_sure_of_it(" delete the ".concat(nameLbl.getText()).concat(" from cart "))) {
+            if (i_am_sure_of_it("delete ".concat(nameLbl.getText()).concat(" from cart"))) {
                 if (delete_cart_item(KEY)) {
                     MainUI.cartItems.remove(KEY);
                     final Node currentNode = nameLbl.getParent().getParent();

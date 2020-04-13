@@ -1,0 +1,57 @@
+.tree-table-view .column-header, .tree-table-view .column-header .filler {
+    -fx-background-color: linear-gradient(#FFB900, #F0D801);
+}
+.tree-table-view .column-header .label {
+    -fx-font-family: 'Fira Sans Medium';
+    -fx-font-size: 16px;
+    -fx-letter-spacing: 2px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER;
+}
+.tree-table-view .cell {
+    -fx-font-family: 'Fira Sans Medium';
+    -fx-font-size: 16px;
+    -fx-letter-spacing: 2px;
+    -fx-text-fill: lightgray;
+    -fx-alignment: CENTER;
+    -fx-cell-size: 35;
+    -fx-background-color: rgba(41, 41, 45, 0.4);
+    -fx-border-color: rgba(41, 41, 45, 0.4);
+}
+.tree-table-view .tree-table-row-cell:selected {
+    -fx-background-color: #0072cd;
+    /* -fx-table-cell-border-color: #FFB900; */
+    -fx-text-background-color: white;
+    -fx-alignment: CENTER;  
+}
+.tree-table-view .increment-button , .tree-table-view .decrement-button {
+    -fx-background-color: transparent;
+    -fx-bacground-radius: 2em;
+}
+.tree-table-view .scroll-bar:horizontal .track , .tree-table-view .scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0em;
+    -fx-border-radius: 0em;
+}
+.tree-table-view .scroll-bar:horizontal .thumb , .tree-table-view .scroll-bar:vertical .thumb {
+    -fx-background-color: rgb(226, 123, 0);
+    -fx-background-insets: 2, 0, 0;
+    -fx-background-radius: 5em;
+}
+.tree-table-view {
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+}
+.tree-table-view .scroll-bar:vertical {
+    -fx-pref-width: 16.5;
+    -fx-padding: 3;
+}
+.tree-table-view .scroll-bar:horizontal {
+    -fx-pref-height: 16.5;
+    -fx-padding: 3;
+}
+.tree-table-view .scroll-bar, .tree-table-view .scroll-bar:pressed, .tree-table-view .scroll-bar:focused {
+    -fx-font-size: 15;
+}

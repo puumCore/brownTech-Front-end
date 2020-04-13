@@ -465,7 +465,7 @@ public class MainUI extends Issues implements Initializable {
     }
 
     @FXML
-    private void check_if_the_serial_exists(ActionEvent actionEvent) {
+    private void check_if_the_serial_exists(ActionEvent event) {
         if (prodSerialTF.getText().trim().isEmpty() || prodSerialTF.getText() == null) {
             empty_and_null_pointer_message(prodSerialTF).show();
             return;
@@ -478,7 +478,7 @@ public class MainUI extends Issues implements Initializable {
     }
 
     @FXML
-    private void choose_image_from_local_drive(ActionEvent actionEvent) {
+    private void choose_image_from_local_drive(ActionEvent event) {
         try {
             PATH_TO_IMAGE_OF_NEW_PRODUCT = null;
             final FileChooser fileChooser = new FileChooser();
@@ -814,10 +814,10 @@ public class MainUI extends Issues implements Initializable {
     }
 
     @FXML
-    private void show_add_stock_page(ActionEvent actionEvent) {
-        if (actionEvent != null) {
+    private void show_add_stock_page(ActionEvent event) {
+        if (event != null) {
             switch_widows_in_displayPane(addStockPane);
-            final JFXButton jfxButton = (JFXButton) actionEvent.getSource();
+            final JFXButton jfxButton = (JFXButton) event.getSource();
             highlight_button_clicked_in_menuPane(jfxButton);
             display_or_hide_payments_pane(addStockPane);
         }
@@ -990,7 +990,7 @@ public class MainUI extends Issues implements Initializable {
     }
 
     @FXML
-    private void upload_product(ActionEvent actionEvent) {
+    private void upload_product(ActionEvent event) {
         if (prodSerialTF.getText().trim().isEmpty() || prodSerialTF.getText() == null) {
             empty_and_null_pointer_message(prodSerialTF).show();
             return;
