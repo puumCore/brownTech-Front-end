@@ -15,7 +15,7 @@ import static java.awt.print.Printable.PAGE_EXISTS;
  * @author Muriithi_Mandela
  */
 
-public class PrintWork extends Issues {
+public class PrintWork extends Watchdog {
 
     public static ArrayList<Object> bill_items = new ArrayList<>();
 
@@ -80,18 +80,18 @@ public class PrintWork extends Issues {
                 ex.printStackTrace();
                 Platform.runLater(() -> programmer_error(ex).show());
                 new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + ex, 1)).start();
-                new Thread(stack_trace_printing(ex.getStackTrace())).start();
+                new Thread(stack_trace_printing(ex)).start();
             }
         } catch (IllegalArgumentException ex) {
             ex.printStackTrace();
             Platform.runLater(() -> programmer_error(ex).show());
             new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + ex, 1)).start();
-            new Thread(stack_trace_printing(ex.getStackTrace())).start();
+            new Thread(stack_trace_printing(ex)).start();
         } catch (Exception ex) {
             ex.printStackTrace();
             programmer_error(ex).show();
             new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + ex, 1)).start();
-            new Thread(stack_trace_printing(ex.getStackTrace())).start();
+            new Thread(stack_trace_printing(ex)).start();
         }
     }
 }

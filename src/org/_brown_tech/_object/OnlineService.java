@@ -1,5 +1,7 @@
 package org._brown_tech._object;
 
+import com.google.gson.Gson;
+
 import java.io.Serializable;
 
 /**
@@ -7,11 +9,11 @@ import java.io.Serializable;
  */
 public class OnlineService implements Serializable {
 
-    public static final long serialVersionUID = 62L;
+    public static final long serialVersionUID = 4L;
 
-    public Integer serial;
-    public String name;
-    public Double defaultCost;
+    private Integer serial;
+    private String name;
+    private Double defaultCost;
 
     public OnlineService() {
     }
@@ -48,10 +50,6 @@ public class OnlineService implements Serializable {
 
     @Override
     public String toString() {
-        return "OnlineService{" +
-                "serial=" + serial +
-                ", name='" + name + '\'' +
-                ", defaultCost=" + defaultCost +
-                '}';
+        return new Gson().toJson(this, OnlineService.class);
     }
 }

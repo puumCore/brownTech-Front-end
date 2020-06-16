@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
@@ -18,8 +19,8 @@ public class Main extends Application {
     public static Stage stage;
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/org/_brown_tech/_fxml/mainUI.fxml"));
+    public void start(@NotNull Stage primaryStage) throws Exception {
+        Parent root = FXMLLoader.load(getClass().getResource("/org/_brown_tech/_fxml/sample.fxml"));
         Scene scene = new Scene(root);
         scene.setOnMousePressed(event2 -> {
             xOffset = event2.getSceneX();

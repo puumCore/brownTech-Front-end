@@ -9,21 +9,21 @@ import java.io.Serializable;
  */
 public class Account implements Serializable {
 
-    public static final long serialVersionUID = 82L;
+    public static final long serialVersionUID = 1L;
 
-    public String username = "", firstname = "", surname = "", siri = "", email = "";
-    public boolean isAdmin;
+    private int rowid;
+    private String username, fname, surname, password, email;
+    private boolean isAdmin, isActive;
 
     public Account() {
     }
 
-    public Account(String username, String firstname, String surname, String siri, String email, boolean isAdmin) {
-        this.username = username;
-        this.firstname = firstname;
-        this.surname = surname;
-        this.siri = siri;
-        this.email = email;
-        this.isAdmin = isAdmin;
+    public int getRowid() {
+        return rowid;
+    }
+
+    public void setRowid(int rowid) {
+        this.rowid = rowid;
     }
 
     public String getUsername() {
@@ -34,12 +34,12 @@ public class Account implements Serializable {
         this.username = username;
     }
 
-    public String getFirstname() {
-        return firstname;
+    public String getFname() {
+        return fname;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setFname(String fname) {
+        this.fname = fname;
     }
 
     public String getSurname() {
@@ -50,12 +50,12 @@ public class Account implements Serializable {
         this.surname = surname;
     }
 
-    public String getSiri() {
-        return siri;
+    public String getPassword() {
+        return password;
     }
 
-    public void setSiri(String siri) {
-        this.siri = siri;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getEmail() {
@@ -72,6 +72,14 @@ public class Account implements Serializable {
 
     public void setAdmin(boolean admin) {
         isAdmin = admin;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 
     @Override

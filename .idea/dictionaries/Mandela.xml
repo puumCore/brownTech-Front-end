@@ -6,6 +6,8 @@
       <w>ffffff</w>
       <w>fira</w>
       <w>firstname</w>
+      <w>fname</w>
+      <w>googlebot</w>
       <w>habari</w>
       <w>imageview</w>
       <w>jdbc</w>
@@ -15,6 +17,7 @@
       <w>mwenye</w>
       <w>myaccount</w>
       <w>noimage</w>
+      <w>rowid</w>
       <w>siri</w>
       <w>smtp</w>
       <w>sqlite</w>

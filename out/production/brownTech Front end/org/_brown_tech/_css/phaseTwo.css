@@ -1,121 +1,155 @@
 .handCursor {
     -fx-cursor: hand;
 }
+
 .input_text {
-    -fx-font-family:  'Fira Sans Medium';
-    -fx-font-size:  16px;
+    -fx-font-family: 'Fira Sans Medium';
+    -fx-font-size: 16px;
     -fx-text-fill: #000000;
     -fx-prompt-text-fill: #bdbdbd;
 }
+
 .money_input {
     -fx-font-family: 'Fira Sans Medium';
-    -fx-font-size:  22px;
+    -fx-font-size: 22px;
     -fx-text-fill: #000000;
     -fx-prompt-text-fill: #bdbdbd;
 }
+
 .menu_buttons {
-    -fx-font-family:  'HelveticaNeueLT Std Med Cn';
-    -fx-font-size:  18px;
+    -fx-font-family: 'HelveticaNeueLT Std Med Cn';
+    -fx-font-size: 18px;
 }
+
 #result {
-    -fx-font-family:  'Fira Sans';
-    -fx-font-size:  16px;
+    -fx-font-family: 'Fira Sans';
+    -fx-font-size: 16px;
 }
+
 .title {
-    -fx-font-family:  'Fira Sans';
-    -fx-font-size:  14px;
+    -fx-font-family: 'Fira Sans';
+    -fx-font-size: 14px;
 }
+
 .detail {
-    -fx-font-family:  'Fira Sans';
-    -fx-font-size:  16px;
+    -fx-font-family: 'Fira Sans';
+    -fx-font-size: 16px;
 }
+
 #detail_for_money {
-    -fx-font-family:  'Fira Sans';
-    -fx-font-size:  18px;
+    -fx-font-family: 'Fira Sans';
+    -fx-font-size: 18px;
 }
+
 .questions {
-    -fx-font-family:  'Fira Sans';
-    -fx-font-size:  16px;
+    -fx-font-family: 'Fira Sans';
+    -fx-font-size: 16px;
 }
+
 .answers {
-    -fx-font-family:  'Fira Sans Medium';
-    -fx-font-size:  18px;
+    -fx-font-family: 'Fira Sans Medium';
+    -fx-font-size: 18px;
 }
+
 .plus_minus_btn {
-    -fx-font-family:  'Fira Sans Semibold';
-    -fx-font-size:  20px;
+    -fx-font-family: 'Fira Sans Semibold';
+    -fx-font-size: 20px;
 }
+
 .sectionTitle {
-    -fx-font-family:  'Fira Sans';
-    -fx-font-size:  18px;
+    -fx-font-family: 'Fira Sans';
+    -fx-font-size: 18px;
 }
+
 .table_header {
-    -fx-font-family:  'Fira Sans Medium';
-    -fx-font-size:  16px;
+    -fx-font-family: 'Fira Sans Medium';
+    -fx-font-size: 16px;
 }
+
 #ksh {
-    -fx-font-family:  'HelveticaNeueLT Std Cn';
-    -fx-font-size:  28px;
+    -fx-font-family: 'HelveticaNeueLT Std Cn';
+    -fx-font-size: 28px;
 }
+
 #billAmount {
-    -fx-font-family:  'HelveticaNeueLT Std Cn';
-    -fx-font-size:  36px;
+    -fx-font-family: 'HelveticaNeueLT Std Cn';
+    -fx-font-size: 36px;
     -fx-font-weight: 700;
 }
+
 .payment_options_buttons {
-    -fx-font-family:  'HelveticaNeueLT Std Med Cn';
-    -fx-font-size:  20px;
+    -fx-font-family: 'HelveticaNeueLT Std Med Cn';
+    -fx-font-size: 20px;
 }
+
 .jfx-date-picker {
     -fx-prompt-text-fill: #797979;
- }
- .jfx-combo-box {
+}
+
+.jfx-combo-box {
     -fx-prompt-text-fill: #797979;
- }
- .jfx-combo-box .cell {
+}
+
+.jfx-combo-box .cell {
     -fx-text-fill: rgb(0, 0, 0);
- }
- .scroll-pane {
+}
+
+.scroll-pane {
     -fx-background-color: #f9f9f9;
- }
- 
- .scroll-bar:horizontal,
- .scroll-bar:vertical {
-    -fx-background-color:  transparent;
- }
- 
- .scroll-bar:horizontal.track,
- .scroll-bar:vertical.track {
-    -fx-background-color:  transparent;
+}
+
+.scroll-bar:horizontal,
+.scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:horizontal.track,
+.scroll-bar:vertical.track {
+    -fx-background-color: transparent;
     -fx-border-color: #4D4D4D;
     -fx-background-radius: 0em;
- }
- 
- .scroll-bar:horizontal .thumb,
- .scroll-bar:vertical .thumb {
-    -fx-background-color:  rgb(221, 118, 0);
+}
+
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color: linear-gradient(#FFB900, #F0D801);
+    ;
     -fx-background-radius: 5em;
- }
- .scroll-bar:vertical {
-   -fx-pref-width: 14.5;
-   -fx-padding: 3;
 }
+
+.scroll-bar:vertical {
+    -fx-pref-width: 14.5;
+    -fx-padding: 3;
+}
+
 .scroll-bar:horizontal {
-   -fx-pref-height: 14.5;
-   -fx-padding: 3;
+    -fx-pref-height: 14.5;
+    -fx-padding: 3;
 }
-.scroll-bar, .scroll-bar:pressed, .scroll-bar:focused {
-   -fx-font-size: 15;
+
+.scroll-bar,
+.scroll-bar:pressed,
+.scroll-bar:focused {
+    -fx-font-size: 15;
 }
+
 #account_edit_info {
-    -fx-font-family:  'Fira Sans';
-    -fx-font-size:  22px;
+    -fx-font-family: 'Fira Sans';
+    -fx-font-size: 22px;
 }
+
 .show_hide_password {
-    -fx-font-family:  'Montserrat Medium';
-    -fx-font-size:  13px;
+    -fx-font-family: 'Montserrat Medium';
+    -fx-font-size: 13px;
 }
+
 .search_button {
-    -fx-font-family:  'Fira Sans Medium';
-    -fx-font-size:  16px;
+    -fx-font-family: 'Fira Sans Medium';
+    -fx-font-size: 16px;
+}
+
+#fullname {
+    -fx-font-family: 'Fira Sans Medium';
+    -fx-font-size: 12px;
+    -fx-font-style: italic;
 }

@@ -18,7 +18,6 @@
     <orderEntry type="library" name="gson-2.8.2" level="application" />
     <orderEntry type="library" name="json-simple-1.1.1" level="application" />
     <orderEntry type="library" name="commons-io-2.6_COPY_FILES_FROM_PLACE_TO_PLACE" level="application" />
-    <orderEntry type="library" name="EMAIL" level="application" />
     <orderEntry type="library" name="GEN RANDOM WORDS" level="application" />
   </component>
 </module>

@@ -1,9 +1,0 @@
-.name, .quantity {
-    -fx-font-family:  'Fira Sans';
-}
-.cost {
-    -fx-font-family:  'Fira Sans Medium';
-}
-.name, .quantity, .cost {
-    -fx-font-size:  14px;
-}

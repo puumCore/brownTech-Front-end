@@ -5,11 +5,11 @@
       <options>
         <option name="appClass" value="org._brown_tech.Main" />
         <option name="convertCss2Bin" value="true" />
-        <option name="description" value="" />
+        <option name="description" value="The user may make sales from this end point" />
         <option name="htmlPlaceholderId" value="" />
         <option name="nativeBundle" value="all" />
-        <option name="title" value="Brown tech FE" />
-        <option name="vendor" value="MandelaMuriithi" />
+        <option name="title" value="brownTech: Frontend" />
+        <option name="vendor" value="Mandela Murithi" />
         <option name="version" value="1.0.0" />
       </options>
     </properties>
