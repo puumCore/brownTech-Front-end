@@ -1,4 +1,4 @@
-package org._brown_tech._object._payment;
+package org._brown_tech._model._object;
 
 import com.google.gson.Gson;
 
@@ -12,13 +12,12 @@ public class CartItem implements Serializable {
     public static final long serialVersionUID = 2L;
 
     private Integer id;
-    private String productOrServiceSerial, name;
+    private String productOrServiceSerial;
+    private String name;
     private Integer quantityRequested;
-    private Double price, buyingPrice;
+    private Double price;
+    private Double buyingPrice;
     private boolean isProduct;
-
-    public CartItem() {
-    }
 
     public Integer getId() {
         return id;

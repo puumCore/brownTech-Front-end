@@ -5,7 +5,7 @@ package org._brown_tech._response_model;
  */
 public enum StatusResponse {
 
-    SUCCESS ("Success"), ERROR ("Error");
+    SUCCESS ("Success"), ERROR ("Error"), WARNING("Warning");
 
     public String status;
 

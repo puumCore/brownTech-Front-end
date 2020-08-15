@@ -1,4 +1,4 @@
-package org._brown_tech._object;
+package org._brown_tech._model._object;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -13,7 +13,7 @@ import java.util.List;
 @SuppressWarnings("WeakerAccess")
 public class ReceiptItems {
 
-    public static int spaceBtwnLines, someOtherSpacing;
+    public static int spaceBtwLines, someOtherSpacing;
     public static Graphics graphics;
 
     private String item_name;
@@ -29,10 +29,10 @@ public class ReceiptItems {
     }
 
     public static void printHeader() {
-        graphics.drawString(String.format("%s %28s %4s %7s %4s", " Item", "|", "Selling Price", "x", "Qty"), someOtherSpacing, spaceBtwnLines);
-        spaceBtwnLines += 5;
-        graphics.drawString(String.format("%s", " ---------------------------------------------------"), someOtherSpacing, spaceBtwnLines);
-        spaceBtwnLines += 8;
+        graphics.drawString(String.format("%s %28s %4s %7s %4s", " Item", "|", "Selling Price", "x", "Qty"), someOtherSpacing, spaceBtwLines);
+        spaceBtwLines += 5;
+        graphics.drawString(String.format("%s", " ---------------------------------------------------"), someOtherSpacing, spaceBtwLines);
+        spaceBtwLines += 8;
     }
 
     @NotNull
@@ -78,10 +78,10 @@ public class ReceiptItems {
 
     public void printInvoice() {
         int a = 28 - getItem_code().toCharArray().length;
-        graphics.drawString(String.format("%s", " " + getItem_name().trim()), someOtherSpacing, spaceBtwnLines);
-        spaceBtwnLines += 8;
-        graphics.drawString(String.format("%s %" + a + "s %4s %4s %5s", " " + getItem_code().trim(), "|", String.format("%,.1f", (getItem_sellingPrice() / getItem_quantity())), "x", String.format("%d", getItem_quantity())), someOtherSpacing, spaceBtwnLines);
-        spaceBtwnLines += 10;
+        graphics.drawString(String.format("%s", " " + getItem_name().trim()), someOtherSpacing, spaceBtwLines);
+        spaceBtwLines += 8;
+        graphics.drawString(String.format("%s %" + a + "s %4s %4s %5s", " " + getItem_code().trim(), "|", String.format("%,.1f", (getItem_sellingPrice() / getItem_quantity())), "x", String.format("%d", getItem_quantity())), someOtherSpacing, spaceBtwLines);
+        spaceBtwLines += 10;
     }
 
 }

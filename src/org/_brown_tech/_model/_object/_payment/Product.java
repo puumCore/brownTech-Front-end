@@ -1,4 +1,4 @@
-package org._brown_tech._object._payment;
+package org._brown_tech._model._object._payment;
 
 import com.google.gson.Gson;
 
@@ -12,14 +12,15 @@ public class Product implements Serializable {
 
     public static final long serialVersionUID = 5L;
 
-    private String serial_number, name, description;
+    private String serial_number;
+    private String name;
+    private String description;
     private Integer rating, stock;
-    private Double markedPrice, buyingPrice;
+    private Double markedPrice;
+    private Double buyingPrice;
     private String image;
     private Boolean isAvailable;
 
-    public Product() {
-    }
 
     public String getSerial_number() {
         return serial_number;

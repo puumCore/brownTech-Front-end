@@ -1,4 +1,4 @@
-package org._brown_tech._object._payment;
+package org._brown_tech._model._object._payment;
 
 import com.google.gson.Gson;
 
@@ -19,10 +19,8 @@ public class Receipt implements Serializable {
     private Integer quantitySold;
     private Double sellingPrice;
     private Double buyingPrice;
-    private boolean isProduct;
+    private Boolean isProduct;
 
-    public Receipt() {
-    }
 
     public String getDateAndTime() {
         return dateAndTime;

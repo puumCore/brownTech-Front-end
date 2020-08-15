@@ -1,4 +1,4 @@
-package org._brown_tech._object._payment;
+package org._brown_tech._model._object._payment;
 
 import com.google.gson.Gson;
 
@@ -20,10 +20,7 @@ public class Cheque implements Serializable {
     private String maturityDate;
     private String bank;
     private Double amount;
-    private boolean hasMatured;
-
-    public Cheque() {
-    }
+    private Boolean hasMatured;
 
     public String getDateTime() {
         return dateTime;

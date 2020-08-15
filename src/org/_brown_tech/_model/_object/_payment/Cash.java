@@ -1,4 +1,4 @@
-package org._brown_tech._object._payment;
+package org._brown_tech._model._object._payment;
 
 import com.google.gson.Gson;
 
@@ -16,9 +16,6 @@ public class Cash implements Serializable {
     private String dateTime;
     private Integer receiptNumber;
     private Double amount;
-
-    public Cash() {
-    }
 
     public String getDateTime() {
         return dateTime;

@@ -9,7 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import org._brown_tech._custom.Brain;
-import org._brown_tech._object._payment.CartItem;
+import org._brown_tech._model._object.CartItem;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -41,11 +41,11 @@ public class CartItemUI extends Brain implements Initializable {
                     final VBox motherBox = (VBox) currentNode.getParent();
                     new SlideOutLeft(currentNode).play();
                     Platform.runLater(() -> motherBox.getChildren().remove(currentNode));
-                    Controller.cartItems.remove(KEY);
                     Controller.anItemHasBeenRemovedFromCart = true;
                     success_notification("Item has been removed from cart!").show();
                 } else {
-                    error_message("Failed!", "The item was not successfully removed from cart").show();
+                    error_message("Failed!",
+                            "The item was not successfully removed from cart").show();
                 }
             }
         }

@@ -1,4 +1,4 @@
-package org._brown_tech._object;
+package org._brown_tech._model._object;
 
 import com.google.gson.Gson;
 
@@ -12,11 +12,12 @@ public class Account implements Serializable {
     public static final long serialVersionUID = 1L;
 
     private int rowid;
-    private String username, fname, surname, password, email;
-    private boolean isAdmin, isActive;
-
-    public Account() {
-    }
+    private String username;
+    private String fname;
+    private String surname;
+    private String password;
+    private String email;
+    private boolean isActive;
 
     public int getRowid() {
         return rowid;
@@ -64,14 +65,6 @@ public class Account implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public boolean isAdmin() {
-        return isAdmin;
-    }
-
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
     }
 
     public boolean isActive() {

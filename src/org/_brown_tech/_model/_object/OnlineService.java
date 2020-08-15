@@ -1,4 +1,4 @@
-package org._brown_tech._object;
+package org._brown_tech._model._object;
 
 import com.google.gson.Gson;
 

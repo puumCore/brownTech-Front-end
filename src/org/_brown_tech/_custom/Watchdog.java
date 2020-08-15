@@ -34,7 +34,7 @@ import java.util.Optional;
  * @author Mandela
  */
 
-public class Watchdog {
+public abstract class Watchdog {
 
     private final String pathToErrorFolder = Main.RESOURCE_PATH.getAbsolutePath() + "\\_watchDog\\_error\\";
     private final String pathToInfoFolder = Main.RESOURCE_PATH.getAbsolutePath() + "\\_watchDog\\_info\\";
@@ -52,18 +52,6 @@ public class Watchdog {
         alert.getButtonTypes().setAll(yesButtonType, noButtonType);
         Optional<ButtonType> result = alert.showAndWait();
         return result.isPresent() && result.get().equals(yesButtonType);
-    }
-
-    @NotNull
-    @Contract(value = "_ -> new", pure = true)
-    public final Task<Object> stack_trace_printing(Exception exception) {
-        return new Task<Object>() {
-            @Override
-            public Object call() {
-                write_stack_trace(exception);
-                return false;
-            }
-        };
     }
 
     @NotNull
@@ -222,43 +210,65 @@ public class Watchdog {
                 .position(Pos.TOP_RIGHT);
     }
 
-    public final void write_stack_trace(Exception exception) {
-        BufferedWriter bw = null;
-        try {
-            File log = new File(pathToErrorFolder.concat(gate_date_for_file_name().concat(" stackTrace_log.txt")));
-            if (!log.exists()) {
-                FileWriter fw = new FileWriter(log);
-                fw.write("\nThis is a newly created file [ " + time_stamp() + " ].");
-            }
-            if (log.canWrite() & log.canRead()) {
-                FileWriter fw = new FileWriter(log, true);
-                bw = new BufferedWriter(fw);
-                StringWriter stringWriter = new StringWriter();
-                PrintWriter printWriter = new PrintWriter(stringWriter);
-                exception.printStackTrace(printWriter);
-                String exceptionText = stringWriter.toString();
-                bw.write("\n ##################################################################################################"
-                        + " \n " + time_stamp()
-                        + "\n " + exceptionText
-                        + "\n\n");
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            programmer_error(ex).show();
-        } finally {
+    @Contract(pure = true)
+    public final @NotNull Runnable write_stack_trace(Exception exception) {
+        return () -> {
+            BufferedWriter bw = null;
             try {
-                if (bw != null) {
-                    bw.close();
+                File log = new File(pathToErrorFolder.concat(gate_date_for_file_name().concat(" stackTrace_log.txt")));
+                if (!log.exists()) {
+                    FileWriter fw = new FileWriter(log);
+                    fw.write("\nThis is a newly created file [ " + time_stamp() + " ].");
                 }
-            } catch (Exception ex) {
+                if (log.canWrite() & log.canRead()) {
+                    FileWriter fw = new FileWriter(log, true);
+                    bw = new BufferedWriter(fw);
+                    StringWriter stringWriter = new StringWriter();
+                    PrintWriter printWriter = new PrintWriter(stringWriter);
+                    exception.printStackTrace(printWriter);
+                    String exceptionText = stringWriter.toString();
+                    bw.write("\n ##################################################################################################"
+                            + " \n " + time_stamp()
+                            + "\n " + exceptionText
+                            + "\n\n");
+                }
+            } catch (IOException ex) {
                 ex.printStackTrace();
                 programmer_error(ex).show();
+            } finally {
+                try {
+                    if (bw != null) {
+                        bw.close();
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    programmer_error(ex).show();
+                }
             }
-        }
+        };
     }
 
     private @NotNull String gate_date_for_file_name() {
         return new SimpleDateFormat("dd-MMM-yyyy").format(Calendar.getInstance().getTime()).replaceAll("-", " ");
+    }
+
+    protected final @NotNull Alert server_error(final String description) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.initOwner(Main.stage);
+        alert.setTitle("SERVER ERROR");
+        alert.setHeaderText("The server encountered an error");
+        alert.setContentText("This dialog is a detailed explanation of the error that has occurred");
+        Label label = new Label("The exception stacktrace was: ");
+        TextArea textArea = new TextArea(description);
+        textArea.setEditable(false);
+        textArea.setWrapText(true);
+        textArea.setMaxWidth(Double.MAX_VALUE);
+        textArea.setMaxHeight(Double.MAX_VALUE);
+        VBox vBox = new VBox();
+        vBox.getChildren().add(label);
+        vBox.getChildren().add(textArea);
+        alert.getDialogPane().setExpandableContent(vBox);
+        return alert;
     }
 
     @NotNull

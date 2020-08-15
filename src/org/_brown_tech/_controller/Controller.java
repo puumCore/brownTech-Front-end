@@ -32,12 +32,13 @@ import javafx.util.converter.IntegerStringConverter;
 import org._brown_tech.Main;
 import org._brown_tech._custom.Brain;
 import org._brown_tech._custom.PrintWork;
-import org._brown_tech._object.Account;
-import org._brown_tech._object.OnlineService;
-import org._brown_tech._object._payment.*;
+import org._brown_tech._model._object.Account;
+import org._brown_tech._model._object.CartItem;
+import org._brown_tech._model._object.OnlineService;
+import org._brown_tech._model._object._payment.*;
 import org._brown_tech._outsourced.BCrypt;
 import org._brown_tech._outsourced.PasswordDialog;
-import org._brown_tech._table_object_model.Stock;
+import org._brown_tech._model._table.Stock;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.controlsfx.control.Notifications;
@@ -95,7 +96,7 @@ public class Controller extends Brain implements Initializable {
         }
     };
     private Product product = null;
-    private String USER_MWENYE_AMELOGIN = null;
+    private String currentUsername = null;
     private Account myAccount = null;
     private String PATH_TO_IMAGE_OF_NEW_PRODUCT = null;
     private final List<String> knownProductSerials = new ArrayList<>();
@@ -382,7 +383,8 @@ public class Controller extends Brain implements Initializable {
                     error_message("Failed", "The product wa NOT successfully added to cart!").show();
                 }
             } else {
-                warning_message("Discount alert!", "The discount is too high for the product, otherwise please sell at a reasonable price").show();
+                warning_message("Discount alert!",
+                        "The discount is too high for the product, otherwise please sell at a reasonable price").show();
             }
         } else {
             if (servicesCbx.getSelectionModel().getSelectedItem().trim().isEmpty() || servicesCbx.getSelectionModel().getSelectedItem() == null) {
@@ -405,7 +407,8 @@ public class Controller extends Brain implements Initializable {
                 if (add_product_or_service_to_cart(cartItem)) {
                     final int rowId = get_row_id_of_cart_item(cartItem.getProductOrServiceSerial(), cartItem);
                     if (rowId == -1) {
-                        error_message("Process incomplete!", "The service has been added to cart but i can't get its index position").show();
+                        error_message("Process incomplete!",
+                                "The service has been added to cart but i can't get its index position").show();
                         return;
                     }
                     serviceCostTF.setText("0");
@@ -455,13 +458,11 @@ public class Controller extends Brain implements Initializable {
 
                 breath_of_life();
 
-                USER_MWENYE_AMELOGIN = this.myAccount.getUsername();
+                currentUsername = this.myAccount.getUsername();
 
                 usernameTF.setText("");
                 siriPF.setText("");
                 plainSiriTF.setText("");
-
-                Main.stage.setTitle("Welcome ".concat(this.myAccount.getFname()));
 
                 userFullnameTF.setText(this.myAccount.getFname().concat(" ").concat(this.myAccount.getSurname()));
             }
@@ -495,24 +496,26 @@ public class Controller extends Brain implements Initializable {
             try {
                 FileUtils.copyFileToDirectory(SOURCE_FILE, destination_folder);
                 PATH_TO_IMAGE_OF_NEW_PRODUCT = destination_folder.getAbsolutePath().concat("\\".concat(SOURCE_FILE.getName()));
-                prodView.setImage(new Image(new FileInputStream(destination_folder.getAbsolutePath().concat("\\".concat(SOURCE_FILE.getName())))));
+                prodView.setImage(new Image(
+                        new FileInputStream(destination_folder.getAbsolutePath().concat("\\".concat(SOURCE_FILE.getName())))));
             } catch (IOException e) {
                 if (e.getLocalizedMessage().contains("are the same")) {
                     warning_message("Duplicate image id found", "The image you have selected already exists in the my gallery.").show();
-                    prodView.setImage(new Image(new FileInputStream(destination_folder.getAbsolutePath().concat("\\".concat(SOURCE_FILE.getName())))));
+                    PATH_TO_IMAGE_OF_NEW_PRODUCT = destination_folder.getAbsolutePath().concat("\\".concat(SOURCE_FILE.getName()));
+                    prodView.setImage(new Image(new FileInputStream(PATH_TO_IMAGE_OF_NEW_PRODUCT)));
                     return;
                 }
                 prodView.setImage(new Image(getClass().getResourceAsStream(INPUT_STREAM_TO_NO_IMAGE)));
                 e.printStackTrace();
                 programmer_error(e).show();
                 new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
-                new Thread(stack_trace_printing(e)).start();
+                new Thread(write_stack_trace(e)).start();
             }
         } catch (Exception e) {
             e.printStackTrace();
             programmer_error(e).show();
             new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
-            new Thread(stack_trace_printing(e)).start();
+            new Thread(write_stack_trace(e)).start();
         }
     }
 
@@ -541,7 +544,7 @@ public class Controller extends Brain implements Initializable {
             new FadeOutLeft(menuPane).play();
             myAccount = null;
             product = null;
-            USER_MWENYE_AMELOGIN = null;
+            currentUsername = null;
             cartItems = null;
             loadingBar.setProgress(0);
             new FadeOut(phaseTwo).play();
@@ -570,34 +573,38 @@ public class Controller extends Brain implements Initializable {
             Sale sale = new Sale();
             sale.setDateTime(get_date_and_time());
             sale.setBillAmount(CART_BILL_AMOUNT);
+            sale.setUsername(this.myAccount.getUsername());
             if (event.getSource().equals(fromCash)) {
-                sale.setPaymentMethod(0);
-                sale.setUsername(this.myAccount.getUsername());
                 if (cashTF.getText().trim().equals("0") || cashTF.getText().trim().isEmpty() || cashTF.getText() == null) {
                     empty_and_null_pointer_message(cashTF).show();
                     return;
                 }
+                sale.setPaymentMethod(0);
                 final double PAID_AMOUNT = Double.parseDouble(cashTF.getText().trim());
-                if (PAID_AMOUNT >= CART_BILL_AMOUNT) {
+                if (PAID_AMOUNT >= sale.getBillAmount()) {
                     sale.setReceipts(new ArrayList<>());
                     create_receipt_record_from_cart_items(sale);
-                    final int NEW_RECEIPT_NUMBER = get_a_receipt_number_for_the_sale(sale);
+                    sale.setReceiptId(get_a_receipt_number_for_the_sale(sale));
+                    final double CHANGE = (PAID_AMOUNT - sale.getBillAmount());
                     final Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.initOwner(Main.stage);
                     alert.setTitle("BALANCE STATUS");
-                    alert.setHeaderText("Change is Ksh ".concat(String.format("%,.2f", (PAID_AMOUNT - CART_BILL_AMOUNT))));
-                    alert.setContentText("Customer Paid Ksh ".concat(String.format("%,.2f", PAID_AMOUNT)).concat("\nto clear his bill of Ksh ").concat(String.format("%,.2f", CART_BILL_AMOUNT)).concat("."));
+                    alert.setHeaderText("Change is Ksh ".concat(String.format("%,.2f", CHANGE)));
+                    alert.setContentText("Customer Paid Ksh ".concat(String.format("%,.2f", PAID_AMOUNT))
+                            .concat("\nto clear his bill of Ksh ").concat(String.format("%,.2f", sale.getBillAmount())).concat("."));
                     final Cash cash = new Cash();
                     cash.setDateTime(get_date_and_time());
-                    cash.setReceiptNumber(NEW_RECEIPT_NUMBER);
-                    cash.setAmount(CART_BILL_AMOUNT);
+                    cash.setReceiptNumber(sale.getReceiptId());
+                    cash.setAmount(sale.getBillAmount());
                     if (upload_cash_record(cash)) {
                         if (update_products()) {
-                            alert.show();
+                            if (CHANGE > 0) {
+                                alert.show();
+                            }
                             PrintWork.bill_items.addAll(get_receipt_items_from_cart(cartItems));
                             clear_cart(true);
                             success_notification("The sale has been recorded and the stock may have been updated").show();
-                            receipt_formatting_for_printing(NEW_RECEIPT_NUMBER, PAID_AMOUNT, CART_BILL_AMOUNT, 0);
+                            receipt_formatting_for_printing(sale.getReceiptId(), PAID_AMOUNT, CART_BILL_AMOUNT, sale.getPaymentMethod());
                             new Thread(display_cart_items()).start();
                             start_animate_bill_amount();
                             cashTF.setText("");
@@ -631,25 +638,26 @@ public class Controller extends Brain implements Initializable {
                     empty_and_null_pointer_message(chequeTF).show();
                     return;
                 }
+                sale.setPaymentMethod(1);
                 final double PAID_AMOUNT = Double.parseDouble(chequeTF.getText().trim());
-                if (PAID_AMOUNT >= CART_BILL_AMOUNT) {
+                if (PAID_AMOUNT >= sale.getBillAmount()) {
                     sale.setReceipts(new ArrayList<>());
                     create_receipt_record_from_cart_items(sale);
-                    final int NEW_RECEIPT_NUMBER = get_a_receipt_number_for_the_sale(sale);
+                    sale.setReceiptId(get_a_receipt_number_for_the_sale(sale));
                     Cheque cheque = new Cheque();
                     cheque.setDateTime(get_date_and_time());
-                    cheque.setReceiptNumber(NEW_RECEIPT_NUMBER);
+                    cheque.setReceiptNumber(sale.getReceiptId());
                     cheque.setChequeNumber(Integer.parseInt(chequeNumTF.getText().trim()));
                     cheque.setDrawerName(drawerNameTF.getText().trim());
                     cheque.setMaturityDate(maturityDateTF.getValue().format(dateTimeFormatter));
                     cheque.setBank(banksCbx.getSelectionModel().getSelectedItem());
-                    cheque.setAmount(CART_BILL_AMOUNT);
+                    cheque.setAmount(sale.getBillAmount());
                     if (upload_to_cheque_record(cheque)) {
                         if (update_products()) {
                             PrintWork.bill_items.addAll(get_receipt_items_from_cart(cartItems));
                             clear_cart(true);
                             success_notification("The sale has been recorded and the stock may have been updated").show();
-                            receipt_formatting_for_printing(NEW_RECEIPT_NUMBER, PAID_AMOUNT, CART_BILL_AMOUNT, 1);
+                            receipt_formatting_for_printing(sale.getReceiptId(), PAID_AMOUNT, sale.getBillAmount(), sale.getPaymentMethod());
                             new Thread(display_cart_items()).start();
                             start_animate_bill_amount();
                             chequeNumTF.setText("");
@@ -661,7 +669,8 @@ public class Controller extends Brain implements Initializable {
                             error_message("Incomplete!", "The stock was not updated").show();
                         }
                     } else {
-                        error_message("Incomplete!", "The sale record has been created and its details was written to receipt record but the sale was NOT written to cheque record!").show();
+                        error_message("Incomplete!",
+                                "The cheque record has not been uploaded!").show();
                     }
                 } else {
                     AMOUNT_PAID_IS_TOO_LOW_NOTIFICATION.show();
@@ -670,7 +679,8 @@ public class Controller extends Brain implements Initializable {
                 warning_message("Incomplete function!", "This feature is still under development, stay tuned!").show();
             }
         } else {
-            error_message("Empty Cart!", "You have to sell a product or charge a service to continue!").show();
+            error_message("Empty Cart!",
+                    "You have to sell a product or charge a service to continue!").show();
         }
     }
 
@@ -713,8 +723,8 @@ public class Controller extends Brain implements Initializable {
             } else {
                 try {
                     byte[] decodedImage = Base64.getDecoder().decode(product.getImage());
-                    File productImageFile = new File(FileUtils.getTempDirectoryPath().concat("\\_brownTech\\_gallery\\").concat(RandomStringUtils.randomAlphabetic(10)).concat(".png"));
-                    System.out.println("productImageFile >>" + productImageFile.getAbsolutePath());
+                    File productImageFile = new File(FileUtils.getTempDirectoryPath().concat("\\_brownTech\\_gallery\\")
+                            .concat(RandomStringUtils.randomAlphabetic(10)).concat(".png"));
                     FileUtils.writeByteArrayToFile(productImageFile, decodedImage);
                     image = new Image(new FileInputStream(productImageFile));
                 } catch (Exception e) {
@@ -818,20 +828,20 @@ public class Controller extends Brain implements Initializable {
     private void reset_user_password(ActionEvent event) {
         if (event != null) {
             if (usernameTF.getText().trim().isEmpty() || usernameTF.getText() == null) {
-                empty_and_null_pointer_message(usernameTF.getParent()).text("Ensure you type your valid username to continue!").show();
+                empty_and_null_pointer_message(usernameTF.getParent())
+                        .text("Ensure you type your valid username to continue!").show();
                 return;
             }
             Account account = get_user_account(usernameTF.getText().trim(), null);
             if (account == null) {
-                error_message("Sorry i don't know that username", "Try to remember your username to continue...").show();
+                error_message("Sorry i don't know that username",
+                        "Try to remember your username to continue...").show();
             } else {
-                final String GENERATED_PLAIN_PASSWORD = RandomStringUtils.randomAlphabetic(10);
-                account.setPassword(GENERATED_PLAIN_PASSWORD);
                 account = reset_password(account);
                 if (account == null) {
                     error_message("Failed!", "Your password was not updated, please retry").show();
                 } else {
-                    success_notification("Your account password has been updated!").show();
+                    success_notification("Check your email for the new password we just sent to you!").show();
                 }
             }
         }
@@ -947,12 +957,12 @@ public class Controller extends Brain implements Initializable {
                             myAccount = update_account(myAccount);
                             if (myAccount != null) {
                                 accUsernameTF.setText("");
-                                USER_MWENYE_AMELOGIN = myAccount.getUsername();
+                                currentUsername = myAccount.getUsername();
                                 success_notification("Your new username has been saved").show();
                                 passwordOrUsernameHasBeenUpdated = true;
                             } else {
-                                myAccount = get_user_account(USER_MWENYE_AMELOGIN, null);
-                                USER_MWENYE_AMELOGIN = myAccount.getUsername();
+                                myAccount = get_user_account(currentUsername, null);
+                                currentUsername = myAccount.getUsername();
                                 error_message("Failed!", "I was not able to save your new username").show();
                             }
                         }
@@ -968,7 +978,7 @@ public class Controller extends Brain implements Initializable {
                                 passwordOrUsernameHasBeenUpdated = true;
                                 success_notification("Your new password has been saved").show();
                             } else {
-                                myAccount = get_user_account(USER_MWENYE_AMELOGIN, null);
+                                myAccount = get_user_account(currentUsername, null);
                                 error_message("Failed!", "I was not able to save your new password").show();
                             }
                         }
@@ -979,7 +989,7 @@ public class Controller extends Brain implements Initializable {
                                 accFirstnameTF.setText("");
                                 success_notification("Your new firstname has been saved").show();
                             } else {
-                                myAccount = get_user_account(USER_MWENYE_AMELOGIN, null);
+                                myAccount = get_user_account(currentUsername, null);
                                 error_message("Failed!", "I was not able to save your new firstname").show();
                             }
                         }
@@ -989,7 +999,7 @@ public class Controller extends Brain implements Initializable {
                                 accSurnameTF.setText("");
                                 success_notification("Your new surname has been saved").show();
                             } else {
-                                myAccount = get_user_account(USER_MWENYE_AMELOGIN, null);
+                                myAccount = get_user_account(currentUsername, null);
                                 error_message("Failed!", "I was not able to save your new surname").show();
                             }
                         }
@@ -999,7 +1009,7 @@ public class Controller extends Brain implements Initializable {
                                 accEmailTF.setText("");
                                 success_notification("Your new email has been saved").show();
                             } else {
-                                myAccount = get_user_account(USER_MWENYE_AMELOGIN, null);
+                                myAccount = get_user_account(currentUsername, null);
                                 error_message("Failed!", "I was not able to save your new email").show();
                             }
                         }
@@ -1169,8 +1179,7 @@ public class Controller extends Brain implements Initializable {
         };
     }
 
-    @NotNull
-    public Boolean email_is_in_correct_format(String param) {
+    public boolean email_is_in_correct_format(String param) {
         return Pattern.matches("^[\\w!#$%&’*+/=?`{|}~^-]+(?:\\.[\\w!#$%&’*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$", param);
     }
 
@@ -1214,7 +1223,7 @@ public class Controller extends Brain implements Initializable {
             new Thread(printReceipt(header, footer)).start();
         } catch (Exception ex) {
             new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + ex, 1)).start();
-            new Thread(stack_trace_printing(ex)).start();
+            new Thread(write_stack_trace(ex)).start();
             ex.printStackTrace();
         }
     }
@@ -1266,7 +1275,9 @@ public class Controller extends Brain implements Initializable {
     private void find_stock_item(String param) {
         final List<Product> productList = get_details_of_products_from_the_given_param(param);
         if (productList.isEmpty()) {
-            error_message("Zero result found!", "I could not find any item with an attribute you have provided, try again with something different.").show();
+            error_message("Zero result found!",
+                    "I could not find any item with an attribute you have provided," +
+                            " please try again with something different.").show();
             return;
         }
         put_stock_items_into_table(generate_stock_model_from_product_model(productList));
@@ -1582,7 +1593,7 @@ public class Controller extends Brain implements Initializable {
                         e.printStackTrace();
                         programmer_error(e).show();
                         new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
-                        new Thread(stack_trace_printing(e)).start();
+                        new Thread(write_stack_trace(e)).start();
                         Platform.runLater(() -> error_message_alert("IOException: ", e.getLocalizedMessage()).show());
                     }
                 }
@@ -1614,7 +1625,7 @@ public class Controller extends Brain implements Initializable {
         pQuantityLeftLbl.setText("");
     }
 
-    private void make_a_textField_numeric(@NotNull JFXTextField[] jfxTextFields) {
+    private void make_a_textField_numeric(@NotNull JFXTextField... jfxTextFields) {
         for (JFXTextField jfxTextField : jfxTextFields) {
             TextFormatter<Integer> textFormatter = new TextFormatter<>(converter, 0, integerFilter);
             jfxTextField.setTextFormatter(textFormatter);
@@ -1745,7 +1756,7 @@ public class Controller extends Brain implements Initializable {
                     e.printStackTrace();
                     programmer_error(e).show();
                     new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
-                    new Thread(stack_trace_printing(e)).start();
+                    new Thread(write_stack_trace(e)).start();
                 }
             }));
             new Thread(objectTask).start();
@@ -1753,7 +1764,7 @@ public class Controller extends Brain implements Initializable {
             e.printStackTrace();
             programmer_error(e).show();
             new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
-            new Thread(stack_trace_printing(e)).start();
+            new Thread(write_stack_trace(e)).start();
         }
     }
 
@@ -1820,7 +1831,7 @@ public class Controller extends Brain implements Initializable {
                         steps++;
                     } catch (InterruptedException e) {
                         new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
-                        new Thread(stack_trace_printing(e)).start();
+                        new Thread(write_stack_trace(e)).start();
                         Platform.runLater(() -> error_message_alert("IOException", e.getLocalizedMessage()).show());
                         break;
                     }

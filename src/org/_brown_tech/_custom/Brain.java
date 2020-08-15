@@ -9,9 +9,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org._brown_tech.Main;
 import org._brown_tech._controller.Controller;
-import org._brown_tech._object.Account;
-import org._brown_tech._object.OnlineService;
-import org._brown_tech._object._payment.*;
+import org._brown_tech._model._object.Account;
+import org._brown_tech._model._object.CartItem;
+import org._brown_tech._model._object.OnlineService;
+import org._brown_tech._model._object._payment.*;
 import org._brown_tech._outsourced.BCrypt;
 import org._brown_tech._response_model.StandardResponse;
 import org._brown_tech._response_model.StatusResponse;
@@ -42,14 +43,14 @@ import java.util.*;
 /**
  * @author Mandela
  */
-public class Brain extends Watchdog {
+public abstract class Brain extends Watchdog {
 
     private final SQLiteDataSource ds = new SQLiteDataSource();
     public final String INPUT_STREAM_TO_NO_IMAGE = "/org/_brown_tech/_images/_icons/noimage.png";
     private final String PATH_TO_SERVICES_FILE = Main.RESOURCE_PATH.getAbsolutePath().concat("\\_config\\services.json");
-    protected static String BASE_URL = "http://localhost:4567/brownTech/pos/api";
+    private final String BASE_URL = "http://localhost:3785/brownTech/pos/api";
 
-    public Connection connect_to_memory() {
+    public Connection connect_to_local_memory() {
         try {
             ds.setUrl("jdbc:sqlite:".concat(Main.RESOURCE_PATH.getAbsolutePath().concat("\\_dataSource\\bt_dataStore.db3")));
             return ds.getConnection();
@@ -60,10 +61,11 @@ public class Brain extends Watchdog {
         }
     }
 
-    public Account reset_password(Account account) {
+    public Account reset_password(Account accToReset) {
+        Account account = accToReset;
         try {
             final HttpPost httpPost = new HttpPost(BASE_URL.concat("/recovery"));
-            httpPost.setEntity(new StringEntity(new Gson().toJson(account, Account.class)));
+            httpPost.setEntity(new StringEntity(new Gson().toJson(account, String.class)));
             final CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
             final CloseableHttpResponse closeableHttpResponse = closeableHttpClient.execute(httpPost);
             final int statusCode = closeableHttpResponse.getStatusLine().getStatusCode();
@@ -75,17 +77,26 @@ public class Brain extends Watchdog {
                 final StandardResponse standardResponse = new Gson().fromJson(rootJsonElement, StandardResponse.class);
                 if (standardResponse.getStatus().equals(StatusResponse.SUCCESS)) {
                     account = new Gson().fromJson(standardResponse.getData(), Account.class);
+                } else if (standardResponse.getStatus().equals(StatusResponse.ERROR)) {
+                    account = null;
+                    server_error(standardResponse.getMessage()).show();
                 } else {
+                    account = null;
                     error_message("Failed!", standardResponse.getMessage()).show();
                 }
             } else {
+                account = null;
                 error_message("Error From Server : " + statusCode, "Reason: ".concat(closeableHttpResponse.getStatusLine().getReasonPhrase())).show();
             }
         } catch (IOException e) {
             e.printStackTrace();
             new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
-            new Thread(stack_trace_printing(e)).start();
-            programmer_error(e).show();
+            new Thread(write_stack_trace(e)).start();
+            if (e.getLocalizedMessage().contains("Connection refused")) {
+                error_message_alert("No internet!", "Please connect to the internet to continue").show();
+            } else {
+                programmer_error(e).show();
+            }
             account = null;
         }
         return account;
@@ -108,7 +119,7 @@ public class Brain extends Watchdog {
 
     public void clear_cart(boolean its_time_for_final_cleanup) {
         try {
-            Connection connection = connect_to_memory();
+            Connection connection = connect_to_local_memory();
             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM _cart");
             preparedStatement.executeUpdate();
             preparedStatement = connection.prepareStatement("DELETE FROM sqlite_sequence\n" +
@@ -125,9 +136,13 @@ public class Brain extends Watchdog {
             Controller.cartItems = integerCartItemHashMap;
         } catch (SQLException e) {
             new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
-            new Thread(stack_trace_printing(e)).start();
+            new Thread(write_stack_trace(e)).start();
             e.printStackTrace();
-            programmer_error(e).show();
+            if (e.getLocalizedMessage().contains("Connection refused")) {
+                error_message_alert("No internet!", "Please connect to the internet to continue").show();
+            } else {
+                programmer_error(e).show();
+            }
         }
     }
 
@@ -146,6 +161,8 @@ public class Brain extends Watchdog {
                 final StandardResponse standardResponse = new Gson().fromJson(rootJsonElement, StandardResponse.class);
                 if (standardResponse.getStatus().equals(StatusResponse.SUCCESS)) {
                     return true;
+                } else if (standardResponse.getStatus().equals(StatusResponse.ERROR)) {
+                    server_error(standardResponse.getMessage()).show();
                 } else {
                     error_message("Failed!", standardResponse.getMessage()).show();
                 }
@@ -155,8 +172,12 @@ public class Brain extends Watchdog {
         } catch (IOException e) {
             e.printStackTrace();
             new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
-            new Thread(stack_trace_printing(e)).start();
-            programmer_error(e).show();
+            new Thread(write_stack_trace(e)).start();
+            if (e.getLocalizedMessage().contains("Connection refused")) {
+                error_message_alert("No internet!", "Please connect to the internet to continue").show();
+            } else {
+                programmer_error(e).show();
+            }
         }
         return false;
     }
@@ -182,6 +203,8 @@ public class Brain extends Watchdog {
                         final Product product = new Gson().fromJson(jsonElement, Product.class);
                         productList.add(product);
                     });
+                } else if (standardResponse.getStatus().equals(StatusResponse.ERROR)) {
+                    server_error(standardResponse.getMessage()).show();
                 } else {
                     error_message("Failed!", standardResponse.getMessage()).show();
                 }
@@ -191,8 +214,12 @@ public class Brain extends Watchdog {
         } catch (IOException e) {
             e.printStackTrace();
             new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
-            new Thread(stack_trace_printing(e)).start();
-            programmer_error(e).show();
+            new Thread(write_stack_trace(e)).start();
+            if (e.getLocalizedMessage().contains("Connection refused")) {
+                error_message_alert("No internet!", "Please connect to the internet to continue").show();
+            } else {
+                programmer_error(e).show();
+            }
         }
         return productList;
     }
@@ -216,6 +243,8 @@ public class Brain extends Watchdog {
                         String serial = new Gson().fromJson(jsonElement, String.class);
                         serials.add(serial);
                     }
+                } else if (standardResponse.getStatus().equals(StatusResponse.ERROR)) {
+                    server_error(standardResponse.getMessage()).show();
                 } else {
                     error_message("Failed!", standardResponse.getMessage()).show();
                 }
@@ -225,8 +254,12 @@ public class Brain extends Watchdog {
         } catch (IOException e) {
             e.printStackTrace();
             new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
-            new Thread(stack_trace_printing(e)).start();
-            programmer_error(e).show();
+            new Thread(write_stack_trace(e)).start();
+            if (e.getLocalizedMessage().contains("Connection refused")) {
+                error_message_alert("No internet!", "Please connect to the internet to continue").show();
+            } else {
+                programmer_error(e).show();
+            }
         }
         return serials;
     }
@@ -247,8 +280,12 @@ public class Brain extends Watchdog {
             } catch (IOException e) {
                 e.printStackTrace();
                 new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
-                new Thread(stack_trace_printing(e)).start();
-                programmer_error(e).show();
+                new Thread(write_stack_trace(e)).start();
+                if (e.getLocalizedMessage().contains("Connection refused")) {
+                    error_message_alert("No internet!", "Please connect to the internet to continue").show();
+                } else {
+                    programmer_error(e).show();
+                }
             }
         } else {
             try {
@@ -263,8 +300,12 @@ public class Brain extends Watchdog {
             } catch (IOException e) {
                 e.printStackTrace();
                 new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
-                new Thread(stack_trace_printing(e)).start();
-                programmer_error(e).show();
+                new Thread(write_stack_trace(e)).start();
+                if (e.getLocalizedMessage().contains("Connection refused")) {
+                    error_message_alert("No internet!", "Please connect to the internet to continue").show();
+                } else {
+                    programmer_error(e).show();
+                }
             }
         }
         return results;
@@ -300,8 +341,12 @@ public class Brain extends Watchdog {
                 } catch (IOException e) {
                     e.printStackTrace();
                     new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
-                    new Thread(stack_trace_printing(e)).start();
-                    programmer_error(e).show();
+                    new Thread(write_stack_trace(e)).start();
+                    if (e.getLocalizedMessage().contains("Connection refused")) {
+                        error_message_alert("No internet!", "Please connect to the internet to continue").show();
+                    } else {
+                        programmer_error(e).show();
+                    }
                 }
             } else {
                 allIsGood = true;
@@ -313,7 +358,7 @@ public class Brain extends Watchdog {
     public final Boolean write_mpesa_to_transaction_record(final int LATEST_RECEIPT_NUMBER, final String transactionCode, final String customerName, final String phone, final double bill) {
         boolean allIsGood = false;
         try {
-            Connection connection = connect_to_memory();
+            Connection connection = connect_to_local_memory();
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO _mpesa (\n" +
                     "                       amount,\n" +
                     "                       phone,\n" +
@@ -345,8 +390,12 @@ public class Brain extends Watchdog {
         } catch (SQLException e) {
             e.printStackTrace();
             new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
-            new Thread(stack_trace_printing(e)).start();
-            programmer_error(e).show();
+            new Thread(write_stack_trace(e)).start();
+            if (e.getLocalizedMessage().contains("Connection refused")) {
+                error_message_alert("No internet!", "Please connect to the internet to continue").show();
+            } else {
+                programmer_error(e).show();
+            }
         }
         return allIsGood;
     }
@@ -366,6 +415,8 @@ public class Brain extends Watchdog {
                 final StandardResponse standardResponse = new Gson().fromJson(rootJsonElement, StandardResponse.class);
                 if (standardResponse.getStatus().equals(StatusResponse.SUCCESS)) {
                     return true;
+                } else if (standardResponse.getStatus().equals(StatusResponse.ERROR)) {
+                    server_error(standardResponse.getMessage()).show();
                 } else {
                     error_message("Failed!", standardResponse.getMessage()).show();
                 }
@@ -375,8 +426,12 @@ public class Brain extends Watchdog {
         } catch (IOException e) {
             e.printStackTrace();
             new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
-            new Thread(stack_trace_printing(e)).start();
-            programmer_error(e).show();
+            new Thread(write_stack_trace(e)).start();
+            if (e.getLocalizedMessage().contains("Connection refused")) {
+                error_message_alert("No internet!", "Please connect to the internet to continue").show();
+            } else {
+                programmer_error(e).show();
+            }
         }
         return false;
     }
@@ -396,6 +451,8 @@ public class Brain extends Watchdog {
                 final StandardResponse standardResponse = new Gson().fromJson(rootJsonElement, StandardResponse.class);
                 if (standardResponse.getStatus().equals(StatusResponse.SUCCESS)) {
                     return true;
+                } else if (standardResponse.getStatus().equals(StatusResponse.ERROR)) {
+                    server_error(standardResponse.getMessage()).show();
                 } else {
                     error_message("Failed!", standardResponse.getMessage()).show();
                 }
@@ -405,8 +462,12 @@ public class Brain extends Watchdog {
         } catch (IOException e) {
             e.printStackTrace();
             new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
-            new Thread(stack_trace_printing(e)).start();
-            programmer_error(e).show();
+            new Thread(write_stack_trace(e)).start();
+            if (e.getLocalizedMessage().contains("Connection refused")) {
+                error_message_alert("No internet!", "Please connect to the internet to continue").show();
+            } else {
+                programmer_error(e).show();
+            }
         }
         return false;
     }
@@ -427,6 +488,8 @@ public class Brain extends Watchdog {
                 final StandardResponse standardResponse = new Gson().fromJson(rootJsonElement, StandardResponse.class);
                 if (standardResponse.getStatus().equals(StatusResponse.SUCCESS)) {
                     receiptNumber = new Gson().fromJson(standardResponse.getData(), Integer.class);
+                } else if (standardResponse.getStatus().equals(StatusResponse.ERROR)) {
+                    server_error(standardResponse.getMessage()).show();
                 } else {
                     error_message("Failed!", standardResponse.getMessage()).show();
                 }
@@ -436,8 +499,12 @@ public class Brain extends Watchdog {
         } catch (IOException e) {
             e.printStackTrace();
             new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
-            new Thread(stack_trace_printing(e)).start();
-            programmer_error(e).show();
+            new Thread(write_stack_trace(e)).start();
+            if (e.getLocalizedMessage().contains("Connection refused")) {
+                error_message_alert("No internet!", "Please connect to the internet to continue").show();
+            } else {
+                programmer_error(e).show();
+            }
         }
         return receiptNumber;
     }
@@ -491,8 +558,12 @@ public class Brain extends Watchdog {
         } catch (IOException e) {
             e.printStackTrace();
             new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
-            new Thread(stack_trace_printing(e)).start();
-            programmer_error(e).show();
+            new Thread(write_stack_trace(e)).start();
+            if (e.getLocalizedMessage().contains("Connection refused")) {
+                error_message_alert("No internet!", "Please connect to the internet to continue").show();
+            } else {
+                programmer_error(e).show();
+            }
         }
         return onlineService;
     }
@@ -513,8 +584,12 @@ public class Brain extends Watchdog {
         } catch (IOException e) {
             e.printStackTrace();
             new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
-            new Thread(stack_trace_printing(e)).start();
-            programmer_error(e).show();
+            new Thread(write_stack_trace(e)).start();
+            if (e.getLocalizedMessage().contains("Connection refused")) {
+                error_message_alert("No internet!", "Please connect to the internet to continue").show();
+            } else {
+                programmer_error(e).show();
+            }
         }
         return onlineServices;
     }
@@ -523,7 +598,7 @@ public class Brain extends Watchdog {
     public final HashMap<Integer, CartItem> get_all_cart_items() {
         final HashMap<Integer, CartItem> integerCartItemHashMap = new HashMap<>();
         try {
-            Connection connection = connect_to_memory();
+            Connection connection = connect_to_local_memory();
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT id,\n" +
                     "       p_s_serial,\n" +
                     "       name,\n" +
@@ -552,8 +627,12 @@ public class Brain extends Watchdog {
         } catch (SQLException e) {
             e.printStackTrace();
             new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
-            new Thread(stack_trace_printing(e)).start();
-            programmer_error(e).show();
+            new Thread(write_stack_trace(e)).start();
+            if (e.getLocalizedMessage().contains("Connection refused")) {
+                error_message_alert("No internet!", "Please connect to the internet to continue").show();
+            } else {
+                programmer_error(e).show();
+            }
         }
         return integerCartItemHashMap;
     }
@@ -561,7 +640,7 @@ public class Brain extends Watchdog {
     public final Boolean delete_cart_item(final int rowId) {
         boolean allIsGood = false;
         try {
-            Connection connection = connect_to_memory();
+            Connection connection = connect_to_local_memory();
             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM _cart\n" +
                     "      WHERE id = " + rowId);
             final int executionStatus = preparedStatement.executeUpdate();
@@ -573,8 +652,12 @@ public class Brain extends Watchdog {
         } catch (SQLException e) {
             e.printStackTrace();
             new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
-            new Thread(stack_trace_printing(e)).start();
-            programmer_error(e).show();
+            new Thread(write_stack_trace(e)).start();
+            if (e.getLocalizedMessage().contains("Connection refused")) {
+                error_message_alert("No internet!", "Please connect to the internet to continue").show();
+            } else {
+                programmer_error(e).show();
+            }
         }
         return allIsGood;
     }
@@ -582,7 +665,7 @@ public class Brain extends Watchdog {
     public final Integer get_row_id_of_cart_item(String productOrServiceSerial, @NotNull CartItem cartItem) {
         int serial = -1;
         try {
-            Connection connection = connect_to_memory();
+            Connection connection = connect_to_local_memory();
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT id\n" +
                     "  FROM _cart\n" +
                     " WHERE isProduct = " + cartItem.getProduct() + " AND \n" +
@@ -597,8 +680,12 @@ public class Brain extends Watchdog {
         } catch (SQLException e) {
             e.printStackTrace();
             new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
-            new Thread(stack_trace_printing(e)).start();
-            programmer_error(e).show();
+            new Thread(write_stack_trace(e)).start();
+            if (e.getLocalizedMessage().contains("Connection refused")) {
+                error_message_alert("No internet!", "Please connect to the internet to continue").show();
+            } else {
+                programmer_error(e).show();
+            }
         }
         return serial;
     }
@@ -614,7 +701,7 @@ public class Brain extends Watchdog {
             onlineService = get_selected_service(cartItem.getName());
         }
         try {
-            Connection connection = connect_to_memory();
+            Connection connection = connect_to_local_memory();
             PreparedStatement preparedStatement;
             preparedStatement = connection.prepareStatement("SELECT quantity,\n" +
                     "       price\n" +
@@ -690,8 +777,12 @@ public class Brain extends Watchdog {
         } catch (SQLException e) {
             e.printStackTrace();
             new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
-            new Thread(stack_trace_printing(e)).start();
-            programmer_error(e).show();
+            new Thread(write_stack_trace(e)).start();
+            if (e.getLocalizedMessage().contains("Connection refused")) {
+                error_message_alert("No internet!", "Please connect to the internet to continue").show();
+            } else {
+                programmer_error(e).show();
+            }
         } finally {
             if (theQuantityIsBeyondStock) {
                 error_message_alert("Failed!", "I could not increase the quantity of the requested item because the stock can only provide a maximum of " + product.getStock() + " only.").show();
@@ -720,8 +811,10 @@ public class Brain extends Watchdog {
                         final Product product = new Gson().fromJson(jsonElement, Product.class);
                         productList.add(product);
                     });
+                } else if (standardResponse.getStatus().equals(StatusResponse.ERROR)) {
+                    Platform.runLater(() -> server_error(standardResponse.getMessage()).show());
                 } else {
-                    error_message("Failed!", standardResponse.getMessage()).show();
+                    Platform.runLater(() -> error_message("Failed!", standardResponse.getMessage()).show());
                 }
             } else {
                 error_message("Error From Server : " + statusCode, "Reason: ".concat(closeableHttpResponse.getStatusLine().getReasonPhrase())).show();
@@ -729,8 +822,12 @@ public class Brain extends Watchdog {
         } catch (IOException e) {
             e.printStackTrace();
             new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
-            new Thread(stack_trace_printing(e)).start();
-            programmer_error(e).show();
+            new Thread(write_stack_trace(e)).start();
+            if (e.getLocalizedMessage().contains("Connection refused")) {
+                error_message_alert("No internet!", "Please connect to the internet to continue").show();
+            } else {
+                programmer_error(e).show();
+            }
         }
         return productList;
     }
@@ -750,6 +847,8 @@ public class Brain extends Watchdog {
                 final StandardResponse standardResponse = new Gson().fromJson(rootJsonElement, StandardResponse.class);
                 if (standardResponse.getStatus().equals(StatusResponse.SUCCESS)) {
                     product = new Gson().fromJson(standardResponse.getData(), Product.class);
+                } else if (standardResponse.getStatus().equals(StatusResponse.ERROR)) {
+                    server_error(standardResponse.getMessage()).show();
                 } else {
                     error_message("Failed!", standardResponse.getMessage()).show();
                 }
@@ -759,8 +858,12 @@ public class Brain extends Watchdog {
         } catch (IOException e) {
             e.printStackTrace();
             new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
-            new Thread(stack_trace_printing(e)).start();
-            programmer_error(e).show();
+            new Thread(write_stack_trace(e)).start();
+            if (e.getLocalizedMessage().contains("Connection refused")) {
+                error_message_alert("No internet!", "Please connect to the internet to continue").show();
+            } else {
+                programmer_error(e).show();
+            }
         }
         return product;
     }
@@ -782,6 +885,8 @@ public class Brain extends Watchdog {
                 final StandardResponse standardResponse = new Gson().fromJson(rootJsonElement, StandardResponse.class);
                 if (standardResponse.getStatus().equals(StatusResponse.SUCCESS)) {
                     account = new Gson().fromJson(standardResponse.getData(), Account.class);
+                } else if (standardResponse.getStatus().equals(StatusResponse.ERROR)) {
+                    server_error(standardResponse.getMessage()).show();
                 } else {
                     error_message("Failed!", standardResponse.getMessage()).show();
                 }
@@ -791,8 +896,12 @@ public class Brain extends Watchdog {
         } catch (IOException e) {
             e.printStackTrace();
             new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
-            new Thread(stack_trace_printing(e)).start();
-            programmer_error(e).show();
+            new Thread(write_stack_trace(e)).start();
+            if (e.getLocalizedMessage().contains("Connection refused")) {
+                error_message_alert("No internet!", "Please connect to the internet to continue").show();
+            } else {
+                programmer_error(e).show();
+            }
             account = null;
         }
         return account;
@@ -804,6 +913,7 @@ public class Brain extends Watchdog {
             account.setUsername(username);
             final HttpPost httpPost = new HttpPost(BASE_URL.concat("/user/login"));
             httpPost.setEntity(new StringEntity(new Gson().toJson(account, Account.class)));
+            account = null;
             final CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
             final CloseableHttpResponse closeableHttpResponse = closeableHttpClient.execute(httpPost);
             final int statusCode = closeableHttpResponse.getStatusLine().getStatusCode();
@@ -823,18 +933,27 @@ public class Brain extends Watchdog {
                             }
                         }
                     }
+                } else if (standardResponse.getStatus().equals(StatusResponse.ERROR)) {
+                    server_error(standardResponse.getMessage()).show();
                 } else {
                     error_message("Failed!", standardResponse.getMessage()).show();
                 }
             } else {
-                account = null;
                 error_message("Error From Server : " + statusCode, "Reason: ".concat(closeableHttpResponse.getStatusLine().getReasonPhrase())).show();
             }
         } catch (IOException e) {
             e.printStackTrace();
             new Thread(write_log("\n\n" + time_stamp() + ": The following Exception occurred,\n" + e, 1)).start();
-            new Thread(stack_trace_printing(e)).start();
-            programmer_error(e).show();
+            new Thread(write_stack_trace(e)).start();
+            if (e.getLocalizedMessage().contains("Connection refused")) {
+                error_message_alert("No internet!", "Please connect to the internet to continue").show();
+            } else {
+                if (e.getLocalizedMessage().contains("Connection refused")) {
+                    error_message_alert("No internet!", "Please connect to the internet to continue").show();
+                } else {
+                    programmer_error(e).show();
+                }
+            }
             account = null;
         }
         return account;
